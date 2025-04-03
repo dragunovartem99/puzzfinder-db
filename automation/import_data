@@ -1,0 +1,31 @@
+#!/bin/bash
+
+IMPORT_SQL="INSERT INTO puzzles SELECT 
+    puzzleId,
+    fen,
+    moves,
+    (LENGTH(moves) - LENGTH(REPLACE(moves, ' ', '')) + 1) / 2 AS movesNumber,
+    rating,
+    ratingDeviation,
+    popularity,
+    nbPlays,
+    gameUrl,
+    openingTags,"
+
+for theme in "${THEMES[@]}"; do
+    IMPORT_SQL+="
+    CASE WHEN themes LIKE '%${theme}%' THEN 1 ELSE 0 END AS theme_${theme},"
+done
+
+# Remove trailing comma
+IMPORT_SQL="${IMPORT_SQL%,} FROM temp_import;"
+
+sqlite3 "$DB_FILE" <<EOF
+.mode csv
+.import "$INPUT_CSV" temp_import
+
+$IMPORT_SQL
+
+DROP TABLE temp_import;
+VACUUM;
+EOF
