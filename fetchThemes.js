@@ -7,7 +7,7 @@ const XML_URL =
 
 const OUTPUT_FILE = "automation/themes";
 
-const ignoredThemes = ["oneMove", "short", "long", "veryLong", "mix", "playerGames"];
+const ignoredThemes = ["mix", "playerGames"];
 
 function fetchXML(url) {
 	return new Promise((resolve, reject) =>
