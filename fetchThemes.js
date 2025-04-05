@@ -7,6 +7,8 @@ const XML_URL =
 
 const OUTPUT_FILE = "automation/themes";
 
+const ignoredThemes = ["oneMove", "short", "long", "veryLong", "mix", "playerGames"];
+
 function fetchXML(url) {
 	return new Promise((resolve, reject) =>
 		https
@@ -35,13 +37,10 @@ function extractThemeNames(parsedXML) {
 		const name = string.$.name;
 
 		if (name.endsWith("Description")) {
-			const baseName = name.replace("Description", "");
+			const theme = name.replace("Description", "");
 
-			if (["mix", "playerGames"].includes(baseName)) {
-				continue;
-			}
-
-			themes.push(baseName);
+			if (ignoredThemes.includes(theme)) continue;
+			themes.push(theme);
 		}
 	}
 

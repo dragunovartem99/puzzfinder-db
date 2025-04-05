@@ -26,6 +26,7 @@ CREATE INDEX idx_puzzles_theme_deflection ON puzzles(theme_deflection) WHERE the
 CREATE INDEX idx_puzzles_theme_discoveredAttack ON puzzles(theme_discoveredAttack) WHERE theme_discoveredAttack = 1;
 CREATE INDEX idx_puzzles_theme_doubleCheck ON puzzles(theme_doubleCheck) WHERE theme_doubleCheck = 1;
 CREATE INDEX idx_puzzles_theme_endgame ON puzzles(theme_endgame) WHERE theme_endgame = 1;
+CREATE INDEX idx_puzzles_theme_enPassant ON puzzles(theme_enPassant) WHERE theme_enPassant = 1;
 CREATE INDEX idx_puzzles_theme_exposedKing ON puzzles(theme_exposedKing) WHERE theme_exposedKing = 1;
 CREATE INDEX idx_puzzles_theme_fork ON puzzles(theme_fork) WHERE theme_fork = 1;
 CREATE INDEX idx_puzzles_theme_hangingPiece ON puzzles(theme_hangingPiece) WHERE theme_hangingPiece = 1;

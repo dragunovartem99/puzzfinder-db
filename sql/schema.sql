@@ -33,6 +33,7 @@ CREATE TABLE puzzles (
     theme_discoveredAttack BOOLEAN NOT NULL,
     theme_doubleCheck BOOLEAN NOT NULL,
     theme_endgame BOOLEAN NOT NULL,
+    theme_enPassant BOOLEAN NOT NULL,
     theme_exposedKing BOOLEAN NOT NULL,
     theme_fork BOOLEAN NOT NULL,
     theme_hangingPiece BOOLEAN NOT NULL,
