@@ -1,0 +1,33 @@
+{
+	"name": "puzzfinder-db",
+	"private": true,
+	"description": "",
+	"keywords": [],
+	"homepage": "https://github.com/dragunovartem99/puzzfinder-db#readme",
+	"bugs": {
+		"url": "https://github.com/dragunovartem99/puzzfinder-db/issues",
+		"email": "dragunovartem99@gmail.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/dragunovartem99/puzzfinder-db.git"
+	},
+	"license": "MIT",
+	"author": {
+		"name": "Artem Dragunov",
+		"email": "dragunovartem99@gmail.com"
+	},
+	"main": "index.js",
+	"scripts": {
+		"format": "prettier . --write",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"prettier": "@dragunovartem99/prettier-config",
+	"devDependencies": {
+		"@dragunovartem99/prettier-config": "^1.2.0",
+		"prettier": "^3.5.3"
+	},
+	"dependencies": {
+		"xml2js": "^0.6.2"
+	}
+}
