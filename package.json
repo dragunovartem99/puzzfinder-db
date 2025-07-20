@@ -23,10 +23,10 @@
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"prettier": "@dragunovartem99/prettier-config",
-	"devDependencies": {
-		"@dragunovartem99/prettier-config": "^1.2.0"
-	},
 	"dependencies": {
 		"xml2js": "^0.6.2"
+	},
+	"devDependencies": {
+		"@dragunovartem99/prettier-config": "^1.2.0"
 	}
 }
