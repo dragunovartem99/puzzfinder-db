@@ -1,4 +1,4 @@
-# Puzzfinder DB
+# <img src="/logo.png" width="30"> Puzzfinder DB
 
 A SQLite3 database (~1.5GB) for finding chess puzzles (intended as read-only)
 
