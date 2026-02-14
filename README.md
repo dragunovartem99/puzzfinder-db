@@ -1,6 +1,6 @@
 # <img src="/logo.png" width="30"> Puzzfinder DB
 
-A SQLite3 database (~1.5GB) for finding chess puzzles (intended as read-only)
+A SQLite3 database (~1.7GB) for finding chess puzzles (intended as read-only)
 
 - Single table structure
 - Auto-generated from [Lichess's open puzzle database](https://database.lichess.org/#puzzles)
