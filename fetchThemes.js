@@ -1,18 +1,15 @@
-const fs = require("fs");
-const https = require("https");
-const { parseString } = require("xml2js");
+import { writeFileSync } from "fs";
+import { get } from "https";
+import { parseString } from "xml2js";
 
-const XML_URL =
-	"https://raw.githubusercontent.com/lichess-org/lila/master/translation/source/puzzleTheme.xml";
-
+const XML_URL = "https://raw.githubusercontent.com/lichess-org/lila/master/translation/source/puzzleTheme.xml";
 const OUTPUT_FILE = "automation/themes";
 
 const ignoredThemes = ["mix", "playerGames"];
 
 function fetchXML(url) {
 	return new Promise((resolve, reject) =>
-		https
-			.get(url, (response) => {
+		get(url, (response) => {
 				let data = "";
 				response.on("data", (chunk) => (data += chunk));
 				response.on("end", () => resolve(data));
@@ -66,7 +63,7 @@ async function main() {
 		const themeNames = extractThemeNames(parsedXML);
 		const bashScript = generateBashScript(themeNames);
 
-		fs.writeFileSync(OUTPUT_FILE, bashScript);
+		writeFileSync(OUTPUT_FILE, bashScript);
 		console.log(`Bash script saved to ${OUTPUT_FILE}`);
 	} catch (error) {
 		console.error(error);
