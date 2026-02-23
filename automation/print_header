@@ -1,38 +1,27 @@
 #!/bin/bash
 
-add_padding() {
-	local target_length=$1
-	shift
-	local input="$@"
-
-	local input_length=${#input}
-	local total_spaces=$((target_length - input_length))
-	local left_spaces=$((total_spaces / 2))
-	local right_spaces=$((total_spaces - left_spaces))
-
-	printf "%*s%s%*s" $left_spaces "" "$input" $right_spaces ""
-}
-
 print_header() {
-	local input=$(add_padding 18 "$@")
+	local ascii="
+   _______________  
+8 |_|#|_|#|_|#|_|#| 
+7 |#|_|#|_|#|_|#|_| 
+6 |_|#|_|#|_|#|_|#| 
+5 |#|_|#|_|#|_|#|_| 
+4 |_|#|_|#|_|#|_|#| 
+3 |#|_|#|_|#|_|#|_| 
+2 |_|#|_|#|_|#|_|#| 
+1 |#|_|#|_|#|_|#|_| 
+   a b c d e f g h  "
 
-	local blue='\033[0;34m'
-	local reset="\033[0m"
+	printf "\033[0;34m" # Blue
 
-	echo -e "\t${blue}"
+	echo "${ascii//$'\n'/$'\n\t'}"
 
-	cat << "EOF" 
-	   _______________
-	8 |_|#|_|#|_|#|_|#|
-	7 |#|_|#|_|#|_|#|_|
-	6 |_|#|_|#|_|#|_|#|
-	5 |#|_|#|_|#|_|#|_|
-	4 |_|#|_|#|_|#|_|#|
-	3 |#|_|#|_|#|_|#|_|
-	2 |_|#|_|#|_|#|_|#|
-	1 |#|_|#|_|#|_|#|_|
-	   a b c d e f g h
-EOF
+	local width=$(($(echo "$ascii" | wc -L) - 2))
 
-	echo -e "\n\t>$input<$reset\n"
+	local text="$*"
+	local left_pad=$(((width - ${#text}) / 2))
+	local right_pad=$((width - ${#text} - left_pad))
+
+	printf "\n\t>%*s%s%*s<\033[0m\n\n" $left_pad "" "$text" $right_pad ""
 }
