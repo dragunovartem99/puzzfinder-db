@@ -1,6 +1,26 @@
 #!/bin/bash
 
-IMPORT_SQL="INSERT INTO puzzles SELECT 
+# Build theme_bits_a expression (themes at indices 0..62, bits 0..62)
+BITS_A_EXPR="0"
+for i in "${!THEMES[@]}"; do
+	if [ "$i" -lt 63 ]; then
+		theme="${THEMES[$i]}"
+		bit=$(( 1 << i ))
+		BITS_A_EXPR+=" | (CASE WHEN themes LIKE '%${theme}%' THEN ${bit} ELSE 0 END)"
+	fi
+done
+
+# Build theme_bits_b expression (themes at indices 63+, bits 0+)
+BITS_B_EXPR="0"
+for i in "${!THEMES[@]}"; do
+	if [ "$i" -ge 63 ]; then
+		theme="${THEMES[$i]}"
+		bit=$(( 1 << (i - 63) ))
+		BITS_B_EXPR+=" | (CASE WHEN themes LIKE '%${theme}%' THEN ${bit} ELSE 0 END)"
+	fi
+done
+
+IMPORT_SQL="INSERT INTO puzzles SELECT
     puzzleId,
     fen,
     moves,
@@ -10,15 +30,10 @@ IMPORT_SQL="INSERT INTO puzzles SELECT
     popularity,
     nbPlays,
     gameUrl,
-    openingTags,"
-
-for theme in "${THEMES[@]}"; do
-    IMPORT_SQL+="
-    CASE WHEN themes LIKE '%${theme}%' THEN 1 ELSE 0 END AS theme_${theme},"
-done
-
-# Remove trailing comma
-IMPORT_SQL="${IMPORT_SQL%,} FROM temp_import;"
+    openingTags,
+    ($BITS_A_EXPR) AS theme_bits_a,
+    ($BITS_B_EXPR) AS theme_bits_b
+FROM temp_import;"
 
 sqlite3 "$DB_FILE" <<EOF
 .mode csv

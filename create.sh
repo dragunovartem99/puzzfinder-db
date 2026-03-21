@@ -2,7 +2,6 @@
 
 source ./automation/themes
 source ./automation/print_header
-source ./automation/prayer
 
 INPUT_CSV="lichess_db_puzzle.csv"
 DB_FILE="puzzfinder.db"
