@@ -1,6 +1,6 @@
 #!/bin/bash
 
-THEMES=(
+export THEMES=(
 	"advancedPawn"
 	"advantage"
 	"anastasiaMate"

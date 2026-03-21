@@ -15,12 +15,12 @@ if [ ! -f $DB_FILE ] && [ ! -f $INPUT_CSV ]; then
 fi
 
 print_header "Inserting schema"
-. ./automation/create_schema
+sqlite3 $DB_FILE < $SCHEMA_FILE
 
 print_header "Importing data"
 . ./automation/import_data
 
 print_header "Creating indexes"
-. ./automation/create_indexes
+sqlite3 $DB_FILE < $INDEXES_FILE
 
 print_header "Database created"
