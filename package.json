@@ -22,6 +22,9 @@
 		"fetch-themes": "node automation/fetch-themes.ts",
 		"format": "oxfmt --write",
 		"format:check": "oxfmt --check",
+		"lint": "oxlint --fix",
+		"lint:check": "oxlint",
+		"prepare": "husky",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"dependencies": {
@@ -29,7 +32,9 @@
 	},
 	"devDependencies": {
 		"@dragunovartem99/oxfmt-config": "^1.3.0",
+		"@dragunovartem99/oxlint-config": "^1.0.0",
 		"@types/node": "^25.5.0",
-		"@types/xml2js": "^0.4.14"
+		"@types/xml2js": "^0.4.14",
+		"husky": "^9.1.7"
 	}
 }

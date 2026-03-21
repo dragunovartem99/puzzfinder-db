@@ -8,17 +8,17 @@ const XML_URL =
 
 const IGNORED = new Set(["mix", "playerGames"]);
 
-const xml = await new Promise<string>((resolve, reject) =>
+const xml = await new Promise<string>((resolve, reject) => {
 	get(XML_URL, (res) => {
 		let data = "";
 		res.on("data", (chunk: string) => (data += chunk));
 		res.on("end", () => resolve(data));
-	}).on("error", reject)
-);
+	}).on("error", reject);
+});
 
-const parsed = await new Promise<any>((resolve, reject) =>
-	parseString(xml, (err, result) => (err ? reject(err) : resolve(result)))
-);
+const parsed = await new Promise<any>((resolve, reject) => {
+	parseString(xml, (err, result) => (err ? reject(err) : resolve(result)));
+});
 
 const themes: string[] = parsed.resources.string
 	.map(({ $ }: { $: { name: string } }) => $.name)
