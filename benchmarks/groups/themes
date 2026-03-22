@@ -1,11 +1,9 @@
-#!/bin/bash
-
-group_header "search: themes: fork + pin"
-benchmark "search: themes: fork + pin" "page 1" \
+group "themes: fork + pin"
+pagination "page 1" \
 	"SELECT * FROM puzzles WHERE list_contains(themes, 'fork') AND list_contains(themes, 'pin') LIMIT 20 OFFSET 0;" \
 	"SELECT COUNT(*) FROM puzzles WHERE list_contains(themes, 'fork') AND list_contains(themes, 'pin');"
 
-group_header "search: themes: fork + short"
-benchmark "search: themes: fork + short" "page 1" \
+group "themes: fork + short"
+pagination "page 1" \
 	"SELECT * FROM puzzles WHERE list_contains(themes, 'fork') AND list_contains(themes, 'short') LIMIT 20 OFFSET 0;" \
 	"SELECT COUNT(*) FROM puzzles WHERE list_contains(themes, 'fork') AND list_contains(themes, 'short');"

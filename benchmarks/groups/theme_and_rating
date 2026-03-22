@@ -1,0 +1,7 @@
+group "theme: pin, rating 1000-2000"
+pagination "sort by rating ASC" \
+	"SELECT * FROM puzzles WHERE list_contains(themes, 'pin') AND rating >= 1000 AND rating <= 2000 ORDER BY rating ASC LIMIT 20 OFFSET 0;" \
+	"SELECT COUNT(*) FROM puzzles WHERE list_contains(themes, 'pin') AND rating >= 1000 AND rating <= 2000;"
+pagination "sort by rating ASC, deep page" \
+	"SELECT * FROM puzzles WHERE list_contains(themes, 'pin') AND rating >= 1000 AND rating <= 2000 ORDER BY rating ASC LIMIT 20 OFFSET 1000;" \
+	"SELECT COUNT(*) FROM puzzles WHERE list_contains(themes, 'pin') AND rating >= 1000 AND rating <= 2000;"

@@ -1,9 +1,7 @@
-#!/bin/bash
-
-group_header "search: rating 1200-1800"
-benchmark "search: rating 1200-1800" "page 1" \
+group "rating 1200-1800"
+pagination "page 1" \
 	"SELECT * FROM puzzles WHERE rating >= 1200 AND rating <= 1800 LIMIT 20 OFFSET 0;" \
 	"SELECT COUNT(*) FROM puzzles WHERE rating >= 1200 AND rating <= 1800;"
-benchmark "search: rating 1200-1800" "sort by rating ASC, page 1" \
+pagination "sort by rating ASC" \
 	"SELECT * FROM puzzles WHERE rating >= 1200 AND rating <= 1800 ORDER BY rating ASC LIMIT 20 OFFSET 0;" \
 	"SELECT COUNT(*) FROM puzzles WHERE rating >= 1200 AND rating <= 1800;"

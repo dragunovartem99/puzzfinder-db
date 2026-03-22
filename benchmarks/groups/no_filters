@@ -1,9 +1,7 @@
-#!/bin/bash
-
-group_header "search: no filters"
-benchmark "search: no filters" "page 1" \
+group "no filters"
+pagination "page 1" \
 	"SELECT * FROM puzzles LIMIT 20 OFFSET 0;" \
 	"SELECT COUNT(*) FROM puzzles;"
-benchmark "search: no filters" "deep page (OFFSET 10000)" \
+pagination "deep page" \
 	"SELECT * FROM puzzles LIMIT 20 OFFSET 10000;" \
 	"SELECT COUNT(*) FROM puzzles;"

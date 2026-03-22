@@ -1,0 +1,7 @@
+group "theme: hangingPiece, popularity >= 90"
+pagination "page 1" \
+	"SELECT * FROM puzzles WHERE list_contains(themes, 'hangingPiece') AND popularity >= 90 LIMIT 20 OFFSET 0;" \
+	"SELECT COUNT(*) FROM puzzles WHERE list_contains(themes, 'hangingPiece') AND popularity >= 90;"
+pagination "sort by popularity DESC" \
+	"SELECT * FROM puzzles WHERE list_contains(themes, 'hangingPiece') AND popularity >= 90 ORDER BY popularity DESC LIMIT 20 OFFSET 0;" \
+	"SELECT COUNT(*) FROM puzzles WHERE list_contains(themes, 'hangingPiece') AND popularity >= 90;"

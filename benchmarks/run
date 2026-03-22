@@ -3,25 +3,34 @@
 . "${BASH_SOURCE%/*}/lib/core"
 
 ROOT="${BASH_SOURCE%/*}/.."
-DB_FILE="$ROOT/puzzfinder.duckdb"
-RUNS="${1:-1}"
+DB_FILE="$ROOT/puzzfinder.db"
+RUNS="${1:-5}"
 
 declare -a ROWS
-
-SAMPLE_ID=$(duckdb -csv "$DB_FILE" "SELECT puzzleId FROM puzzles LIMIT 1 OFFSET 5000;" | tail -1)
 
 echo "Running $RUNS iterations per query"
 echo
 
+# direct lookup
 . "${BASH_SOURCE%/*}/groups/get_by_id"
+
+# unfiltered
 . "${BASH_SOURCE%/*}/groups/no_filters"
 . "${BASH_SOURCE%/*}/groups/sort"
+
+# single filter
 . "${BASH_SOURCE%/*}/groups/rating"
 . "${BASH_SOURCE%/*}/groups/moves"
 . "${BASH_SOURCE%/*}/groups/popularity"
-. "${BASH_SOURCE%/*}/groups/theme_single"
-. "${BASH_SOURCE%/*}/groups/themes_multi"
-. "${BASH_SOURCE%/*}/groups/combined"
+. "${BASH_SOURCE%/*}/groups/theme"
+. "${BASH_SOURCE%/*}/groups/themes"
+
+# combined filters
+. "${BASH_SOURCE%/*}/groups/rating_and_moves"
+. "${BASH_SOURCE%/*}/groups/rating_and_popularity"
+. "${BASH_SOURCE%/*}/groups/theme_and_rating"
+. "${BASH_SOURCE%/*}/groups/theme_and_moves"
+. "${BASH_SOURCE%/*}/groups/theme_and_popularity"
 
 DUCKDB_VERSION=$(duckdb --version | awk '{print $1}')
 

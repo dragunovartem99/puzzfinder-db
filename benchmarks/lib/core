@@ -4,12 +4,15 @@ PURPLE='\033[0;35m'
 YELLOW='\033[0;33m'
 RESET='\033[0m'
 
-group_header() {
+_GROUP=''
+
+group() {
+	_GROUP="$1"
 	printf "\n${PURPLE}%s${RESET}\n" "$1"
 }
 
-benchmark() {
-	local group="$1" name="$2" sql_data="$3" sql_count="${4:-}"
+_bench() {
+	local name="$1" sql_data="$2" sql_count="${3:-}"
 	local total=0 start end
 	for (( i=0; i<RUNS; i++ )); do
 		start=$(date +%s%N)
@@ -20,5 +23,8 @@ benchmark() {
 	done
 	local avg=$(( total / RUNS / 1000000 ))
 	printf "  %-50s ${YELLOW}%4d ms avg${RESET}\n" "$name" "$avg"
-	ROWS+=("| $group | $name | $avg |")
+	ROWS+=("| $_GROUP | $name | $avg |")
 }
+
+pagination() { _bench "$1" "$2" "$3"; }
+query()      { _bench "$1" "$2"; }

@@ -1,34 +1,36 @@
 # Benchmarks
 
-_3 iterations · DuckDB v1.5.0_
+_5 iterations · DuckDB v1.5.0_
 
-| Group                               | Query                           | ms avg |
-| ----------------------------------- | ------------------------------- | ------ |
-| get_by_id                           | puzzleId = '03JSh'              | 27     |
-| search: no filters                  | page 1                          | 55     |
-| search: no filters                  | deep page (OFFSET 10000)        | 56     |
-| sort: rating ASC                    | page 1                          | 62     |
-| sort: rating DESC                   | page 1                          | 89     |
-| sort: popularity DESC               | page 1                          | 61     |
-| sort: nbPlays DESC                  | page 1                          | 89     |
-| sort: movesNumber ASC               | page 1                          | 62     |
-| search: rating 1200-1800            | page 1                          | 69     |
-| search: rating 1200-1800            | sort by rating ASC, page 1      | 85     |
-| search: movesNumber = 1             | page 1                          | 336    |
-| search: movesNumber = 2             | page 1                          | 1000   |
-| search: movesNumber = 2             | sort by rating ASC, page 1      | 513    |
-| search: movesNumber = 2             | deep page (OFFSET 10000)        | 1030   |
-| search: popularity >= 90            | page 1                          | 155    |
-| search: popularity >= 90            | sort by popularity DESC, page 1 | 111    |
-| search: popularity <= 50            | page 1                          | 77     |
-| search: theme: fork                 | page 1                          | 133    |
-| search: theme: masterVsMaster       | page 1                          | 132    |
-| search: themes: fork + pin          | page 1                          | 135    |
-| search: themes: fork + short        | page 1                          | 136    |
-| search: rating + fork + sort        | page 1                          | 224    |
-| search: rating + fork + sort        | deep page (OFFSET 1000)         | 242    |
-| search: fork + movesNumber = 2      | page 1                          | 130    |
-| search: fork + movesNumber = 2      | sort by rating ASC, page 1      | 227    |
-| search: rating + movesNumber + sort | page 1                          | 90     |
-| search: fork + popularity >= 90     | page 1                          | 133    |
-| search: fork + popularity >= 90     | sort by popularity DESC, page 1 | 163    |
+| Group                                 | Query                         | ms avg |
+| ------------------------------------- | ----------------------------- | ------ |
+| direct lookup                         | puzzleId = '03JSh'            | 27     |
+| no filters                            | page 1                        | 59     |
+| no filters                            | deep page                     | 59     |
+| sort by rating                        | ASC                           | 68     |
+| sort by rating                        | DESC                          | 94     |
+| sort by popularity                    | DESC                          | 62     |
+| sort by nbPlays                       | DESC                          | 93     |
+| sort by movesNumber                   | ASC                           | 62     |
+| rating 1200-1800                      | page 1                        | 70     |
+| rating 1200-1800                      | sort by rating ASC            | 84     |
+| movesNumber = 1                       | page 1                        | 318    |
+| movesNumber = 2                       | page 1                        | 966    |
+| movesNumber = 2                       | sort by rating ASC            | 525    |
+| movesNumber = 2                       | deep page                     | 992    |
+| popularity >= 90                      | page 1                        | 149    |
+| popularity >= 90                      | sort by popularity DESC       | 107    |
+| popularity <= 50                      | page 1                        | 75     |
+| theme: fork                           | page 1                        | 126    |
+| theme: masterVsMaster                 | page 1                        | 137    |
+| themes: fork + pin                    | page 1                        | 147    |
+| themes: fork + short                  | page 1                        | 137    |
+| rating 1200-1800, movesNumber = 2     | sort by rating ASC            | 92     |
+| rating 1200-1800, popularity >= 90    | page 1                        | 74     |
+| rating 1200-1800, popularity >= 90    | sort by rating ASC            | 94     |
+| theme: pin, rating 1000-2000          | sort by rating ASC            | 218    |
+| theme: pin, rating 1000-2000          | sort by rating ASC, deep page | 228    |
+| theme: sacrifice, movesNumber = 2     | page 1                        | 125    |
+| theme: sacrifice, movesNumber = 2     | sort by rating ASC            | 220    |
+| theme: hangingPiece, popularity >= 90 | page 1                        | 127    |
+| theme: hangingPiece, popularity >= 90 | sort by popularity DESC       | 155    |

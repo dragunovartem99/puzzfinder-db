@@ -1,14 +1,12 @@
-#!/bin/bash
-
-group_header "search: popularity >= 90"
-benchmark "search: popularity >= 90" "page 1" \
+group "popularity >= 90"
+pagination "page 1" \
 	"SELECT * FROM puzzles WHERE popularity >= 90 LIMIT 20 OFFSET 0;" \
 	"SELECT COUNT(*) FROM puzzles WHERE popularity >= 90;"
-benchmark "search: popularity >= 90" "sort by popularity DESC, page 1" \
+pagination "sort by popularity DESC" \
 	"SELECT * FROM puzzles WHERE popularity >= 90 ORDER BY popularity DESC LIMIT 20 OFFSET 0;" \
 	"SELECT COUNT(*) FROM puzzles WHERE popularity >= 90;"
 
-group_header "search: popularity <= 50 (rare)"
-benchmark "search: popularity <= 50" "page 1" \
+group "popularity <= 50"
+pagination "page 1" \
 	"SELECT * FROM puzzles WHERE popularity <= 50 LIMIT 20 OFFSET 0;" \
 	"SELECT COUNT(*) FROM puzzles WHERE popularity <= 50;"
