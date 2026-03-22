@@ -1,0 +1,17 @@
+#!/bin/bash
+
+group_header "search: movesNumber = 1"
+benchmark "search: movesNumber = 1" "page 1" \
+	"SELECT * FROM puzzles WHERE movesNumber = 1 LIMIT 20 OFFSET 0;" \
+	"SELECT COUNT(*) FROM puzzles WHERE movesNumber = 1;"
+
+group_header "search: movesNumber = 2 (most common)"
+benchmark "search: movesNumber = 2" "page 1" \
+	"SELECT * FROM puzzles WHERE movesNumber = 2 LIMIT 20 OFFSET 0;" \
+	"SELECT COUNT(*) FROM puzzles WHERE movesNumber = 2;"
+benchmark "search: movesNumber = 2" "sort by rating ASC, page 1" \
+	"SELECT * FROM puzzles WHERE movesNumber = 2 ORDER BY rating ASC LIMIT 20 OFFSET 0;" \
+	"SELECT COUNT(*) FROM puzzles WHERE movesNumber = 2;"
+benchmark "search: movesNumber = 2" "deep page (OFFSET 10000)" \
+	"SELECT * FROM puzzles WHERE movesNumber = 2 LIMIT 20 OFFSET 10000;" \
+	"SELECT COUNT(*) FROM puzzles WHERE movesNumber = 2;"

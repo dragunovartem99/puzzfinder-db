@@ -11,4 +11,4 @@ themes=$(curl -sf "$XML_URL" | grep -oP 'name="\K\w+(?=Description")')
 	echo 'export THEMES=('
 	grep -vE "$IGNORED" <<< "$themes" | sed 's/.*$/\t"&"/'
 	echo ')'
-} > "${BASH_SOURCE%/*}/themes_list"
+} > "${BASH_SOURCE%/*}/list"

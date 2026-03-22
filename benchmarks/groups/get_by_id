@@ -1,0 +1,5 @@
+#!/bin/bash
+
+group_header "get_by_id"
+benchmark "get_by_id" "puzzleId = '$SAMPLE_ID'" \
+	"SELECT * FROM puzzles WHERE puzzleId = '$SAMPLE_ID' LIMIT 1;"

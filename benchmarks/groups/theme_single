@@ -1,0 +1,11 @@
+#!/bin/bash
+
+group_header "search: theme: fork (common)"
+benchmark "search: theme: fork" "page 1" \
+	"SELECT * FROM puzzles WHERE (theme_bits_a & $FORK_MASK) = $FORK_MASK LIMIT 20 OFFSET 0;" \
+	"SELECT COUNT(*) FROM puzzles WHERE (theme_bits_a & $FORK_MASK) = $FORK_MASK;"
+
+group_header "search: theme: masterVsMaster (rare)"
+benchmark "search: theme: masterVsMaster" "page 1" \
+	"SELECT * FROM puzzles WHERE (theme_bits_$MVM_SIDE & $MVM_MASK) = $MVM_MASK LIMIT 20 OFFSET 0;" \
+	"SELECT COUNT(*) FROM puzzles WHERE (theme_bits_$MVM_SIDE & $MVM_MASK) = $MVM_MASK;"

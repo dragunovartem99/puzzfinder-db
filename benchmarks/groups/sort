@@ -1,0 +1,24 @@
+#!/bin/bash
+
+group_header "sort: rating (no filters)"
+benchmark "sort: rating ASC" "page 1" \
+	"SELECT * FROM puzzles ORDER BY rating ASC LIMIT 20 OFFSET 0;" \
+	"SELECT COUNT(*) FROM puzzles;"
+benchmark "sort: rating DESC" "page 1" \
+	"SELECT * FROM puzzles ORDER BY rating DESC LIMIT 20 OFFSET 0;" \
+	"SELECT COUNT(*) FROM puzzles;"
+
+group_header "sort: popularity (no filters)"
+benchmark "sort: popularity DESC" "page 1" \
+	"SELECT * FROM puzzles ORDER BY popularity DESC LIMIT 20 OFFSET 0;" \
+	"SELECT COUNT(*) FROM puzzles;"
+
+group_header "sort: nbPlays (no filters)"
+benchmark "sort: nbPlays DESC" "page 1" \
+	"SELECT * FROM puzzles ORDER BY nbPlays DESC LIMIT 20 OFFSET 0;" \
+	"SELECT COUNT(*) FROM puzzles;"
+
+group_header "sort: movesNumber (no filters)"
+benchmark "sort: movesNumber ASC" "page 1" \
+	"SELECT * FROM puzzles ORDER BY movesNumber ASC LIMIT 20 OFFSET 0;" \
+	"SELECT COUNT(*) FROM puzzles;"

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-. "${BASH_SOURCE%/*}"/"scripts/themes_list"
-. "${BASH_SOURCE%/*}"/"scripts/print_header"
+. "${BASH_SOURCE%/*}"/"themes/list"
+. "${BASH_SOURCE%/*}"/"utils/print_header"
 
 INPUT_CSV="${BASH_SOURCE%/*}/lichess_db_puzzle.csv"
 DB_FILE="${BASH_SOURCE%/*}/puzzfinder.db"
@@ -18,7 +18,7 @@ print_header "Inserting schema"
 sqlite3 "$DB_FILE" < "$SCHEMA_FILE"
 
 print_header "Importing data"
-. "${BASH_SOURCE%/*}"/"scripts/database_import"
+. "${BASH_SOURCE%/*}"/"database/import"
 
 print_header "Creating indexes"
 sqlite3 "$DB_FILE" < "$INDEXES_FILE"

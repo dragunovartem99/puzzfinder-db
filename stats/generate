@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. "${BASH_SOURCE%/*}"/"themes_list"
+. "${BASH_SOURCE%/*}"/../"themes/list"
 
 ROOT="${BASH_SOURCE%/*}/.."
 DB_FILE="$ROOT/puzzfinder.db"
@@ -42,6 +42,6 @@ ROWS=$(sqlite3 "$DB_FILE" "SELECT theme, cnt FROM ($QUERY) ORDER BY cnt DESC;")
 	done <<< "$ROWS"
 } > "$ROOT/STATS.md"
 
-"${BASH_SOURCE%/*}/stats_align" "$ROOT/STATS.md"
+"${BASH_SOURCE%/*}/../utils/table_align" "$ROOT/STATS.md"
 
 echo "STATS.md written"

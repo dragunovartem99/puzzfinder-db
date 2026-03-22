@@ -1,0 +1,54 @@
+#!/bin/bash
+
+. "${BASH_SOURCE%/*}/../themes/list"
+. "${BASH_SOURCE%/*}/lib/core"
+
+ROOT="${BASH_SOURCE%/*}/.."
+DB_FILE="$ROOT/puzzfinder.db"
+RUNS="${1:-1}"
+
+declare -a ROWS
+
+read -r FORK_SIDE  FORK_MASK  < <(get_bits "fork")
+read -r MVM_SIDE   MVM_MASK   < <(get_bits "masterVsMaster")
+read -r PIN_SIDE   PIN_MASK   < <(get_bits "pin")
+read -r SHORT_SIDE SHORT_MASK < <(get_bits "short")
+
+[[ "$FORK_SIDE" == "a" && "$PIN_SIDE" == "a" ]] \
+	|| { echo "unexpected column for fork/pin — update script"; exit 1; }
+[[ "$SHORT_SIDE" == "b" ]] \
+	|| { echo "unexpected column for short — update script"; exit 1; }
+
+FORK_PIN_MASK=$(( FORK_MASK | PIN_MASK ))
+
+SAMPLE_ID=$(sqlite3 "$DB_FILE" "SELECT puzzleId FROM puzzles LIMIT 1 OFFSET 5000;")
+
+echo "Running $RUNS iterations per query"
+echo
+
+. "${BASH_SOURCE%/*}/groups/get_by_id"
+. "${BASH_SOURCE%/*}/groups/no_filters"
+. "${BASH_SOURCE%/*}/groups/sort"
+. "${BASH_SOURCE%/*}/groups/rating"
+. "${BASH_SOURCE%/*}/groups/moves"
+. "${BASH_SOURCE%/*}/groups/popularity"
+. "${BASH_SOURCE%/*}/groups/theme_single"
+. "${BASH_SOURCE%/*}/groups/themes_multi"
+. "${BASH_SOURCE%/*}/groups/combined"
+
+SQLITE_VERSION=$(sqlite3 --version | awk '{print $1}')
+
+{
+	echo "# Benchmarks"
+	echo ""
+	echo "_${RUNS} iterations · SQLite ${SQLITE_VERSION}_"
+	echo ""
+	echo "| Group | Query | ms avg |"
+	echo "| ----- | ----- | ------ |"
+	printf '%s\n' "${ROWS[@]}"
+} > "$ROOT/BENCHMARKS.md"
+
+"${BASH_SOURCE%/*}/../utils/table_align" "$ROOT/BENCHMARKS.md"
+
+echo
+echo "BENCHMARKS.md written"
