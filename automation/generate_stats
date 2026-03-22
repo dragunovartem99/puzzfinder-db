@@ -1,0 +1,45 @@
+#!/bin/bash
+
+. "./themes"
+
+ROOT="${BASH_SOURCE%/*}/.."
+DB_FILE="$ROOT/puzzfinder.db"
+
+TOTAL=$(sqlite3 "$DB_FILE" "SELECT COUNT(*) FROM puzzles;")
+
+QUERY=""
+for i in "${!THEMES[@]}"; do
+	theme="${THEMES[$i]}"
+	col="theme_bits_a"
+	bit=$((1 << i))
+	if [ "$i" -ge 63 ]; then
+		col="theme_bits_b"
+		bit=$((1 << (i - 63)))
+	fi
+	if [ -z "$QUERY" ]; then
+		QUERY="SELECT '$theme' AS theme, SUM(($col & $bit) != 0) AS cnt FROM puzzles"
+	else
+		QUERY+=" UNION ALL SELECT '$theme', SUM(($col & $bit) != 0) FROM puzzles"
+	fi
+done
+
+ROWS=$(sqlite3 "$DB_FILE" "SELECT theme, cnt FROM ($QUERY) ORDER BY cnt DESC;")
+
+{
+	echo "# Theme Statistics"
+	echo ""
+	echo "Total puzzles: **$(printf "%'.f" "$TOTAL")**"
+	echo ""
+	echo "| #   | Theme | Count | % of puzzles |"
+	echo "| --- | ----- | ----- | ------------ |"
+
+	rank=1
+	while IFS='|' read -r theme count; do
+		pct=$(awk -v c="$count" -v t="$TOTAL" 'BEGIN { printf "%.1f%%", c / t * 100 }')
+		count_fmt=$(printf "%'.f" "$count")
+		printf "| %d | %s | %s | %s |\n" "$rank" "$theme" "$count_fmt" "$pct"
+		((rank++))
+	done <<< "$ROWS"
+} > "$ROOT/STATS.md"
+
+echo "STATS.md written"
