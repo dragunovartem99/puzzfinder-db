@@ -1,0 +1,30 @@
+#!/bin/bash
+
+awk '
+{a[NR]=$0}
+/^\|/ {
+    n = split($0, f, "|")
+    for (i = 2; i < n; i++) {
+        gsub(/^ +| +$/, "", f[i])
+        if (f[i] !~ /^-+$/ && length(f[i]) > w[i])
+            w[i] = length(f[i])
+    }
+}
+END {
+    for (r = 1; r <= NR; r++) {
+        if (a[r] !~ /^\|/) { print a[r]; continue }
+        n = split(a[r], f, "|")
+        for (i = 2; i < n; i++) gsub(/^ +| +$/, "", f[i])
+        printf "|"
+        for (i = 2; i < n; i++) {
+            if (f[i] ~ /^-+$/) {
+                s = sprintf("%-*s", w[i], ""); gsub(/ /, "-", s)
+                printf " %s |", s
+            } else {
+                printf " %-*s |", w[i], f[i]
+            }
+        }
+        printf "\n"
+    }
+}
+' "$1" > "$1.tmp" && mv "$1.tmp" "$1"

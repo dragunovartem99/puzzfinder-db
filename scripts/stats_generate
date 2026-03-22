@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. "./themes"
+. "${BASH_SOURCE%/*}"/"themes_list"
 
 ROOT="${BASH_SOURCE%/*}/.."
 DB_FILE="$ROOT/puzzfinder.db"
@@ -30,8 +30,8 @@ ROWS=$(sqlite3 "$DB_FILE" "SELECT theme, cnt FROM ($QUERY) ORDER BY cnt DESC;")
 	echo ""
 	echo "Total puzzles: **$(printf "%'.f" "$TOTAL")**"
 	echo ""
-	echo "| #   | Theme | Count | % of puzzles |"
-	echo "| --- | ----- | ----- | ------------ |"
+	echo "| #  | Theme | Count | % of puzzles |"
+	echo "| -- | ----- | ----- | ------------ |"
 
 	rank=1
 	while IFS='|' read -r theme count; do
@@ -41,5 +41,7 @@ ROWS=$(sqlite3 "$DB_FILE" "SELECT theme, cnt FROM ($QUERY) ORDER BY cnt DESC;")
 		((rank++))
 	done <<< "$ROWS"
 } > "$ROOT/STATS.md"
+
+"${BASH_SOURCE%/*}/stats_align" "$ROOT/STATS.md"
 
 echo "STATS.md written"

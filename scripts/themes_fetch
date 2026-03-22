@@ -1,0 +1,14 @@
+#!/bin/bash
+
+XML_URL="https://raw.githubusercontent.com/lichess-org/lila/master/translation/source/puzzleTheme.xml"
+IGNORED="^(mix|playerGames)$"
+
+themes=$(curl -sf "$XML_URL" | grep -oP 'name="\K\w+(?=Description")')
+
+{
+	echo '#!/bin/bash'
+	echo
+	echo 'export THEMES=('
+	grep -vE "$IGNORED" <<< "$themes" | sed 's/.*$/\t"&"/'
+	echo ')'
+} > "${BASH_SOURCE%/*}/themes_list"
