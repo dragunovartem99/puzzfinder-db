@@ -1,46 +1,18 @@
 #!/bin/bash
 
-# Build theme_bits_a expression (themes at indices 0..62, bits 0..62)
-BITS_A_EXPR="0"
-for i in "${!THEMES[@]}"; do
-	if [ "$i" -lt 63 ]; then
-		theme="${THEMES[$i]}"
-		bit=$(( 1 << i ))
-		BITS_A_EXPR+=" | (CASE WHEN themes LIKE '%${theme}%' THEN ${bit} ELSE 0 END)"
-	fi
-done
-
-# Build theme_bits_b expression (themes at indices 63+, bits 0+)
-BITS_B_EXPR="0"
-for i in "${!THEMES[@]}"; do
-	if [ "$i" -ge 63 ]; then
-		theme="${THEMES[$i]}"
-		bit=$(( 1 << (i - 63) ))
-		BITS_B_EXPR+=" | (CASE WHEN themes LIKE '%${theme}%' THEN ${bit} ELSE 0 END)"
-	fi
-done
-
-IMPORT_SQL="INSERT INTO puzzles SELECT
-    puzzleId,
+duckdb "$DB_FILE" <<EOF
+INSERT INTO puzzles
+SELECT
+    puzzleid AS puzzleId,
     fen,
     moves,
-    (LENGTH(moves) - LENGTH(REPLACE(moves, ' ', '')) + 1) / 2 AS movesNumber,
+    (length(moves) - length(replace(moves, ' ', '')) + 1) / 2 AS movesNumber,
     rating,
-    ratingDeviation,
+    ratingdeviation AS ratingDeviation,
     popularity,
-    nbPlays,
-    gameUrl,
-    openingTags,
-    ($BITS_A_EXPR) AS theme_bits_a,
-    ($BITS_B_EXPR) AS theme_bits_b
-FROM temp_import;"
-
-sqlite3 "$DB_FILE" <<EOF
-.mode csv
-.import "$INPUT_CSV" temp_import
-
-$IMPORT_SQL
-
-DROP TABLE temp_import;
-VACUUM;
+    nbplays AS nbPlays,
+    gameurl AS gameUrl,
+    openingtags AS openingTags,
+    string_split(themes, ' ') AS themes
+FROM read_csv_auto('$INPUT_CSV');
 EOF

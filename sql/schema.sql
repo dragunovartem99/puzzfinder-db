@@ -9,6 +9,5 @@ CREATE TABLE puzzles (
     nbPlays INTEGER NOT NULL,
     gameUrl TEXT NOT NULL,
     openingTags TEXT,
-    theme_bits_a INTEGER NOT NULL,
-    theme_bits_b INTEGER NOT NULL
+    themes VARCHAR[]
 );

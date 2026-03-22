@@ -1,29 +1,11 @@
 #!/bin/bash
 
-. "${BASH_SOURCE%/*}"/../"themes/list"
-
 ROOT="${BASH_SOURCE%/*}/.."
-DB_FILE="$ROOT/puzzfinder.db"
+DB_FILE="$ROOT/puzzfinder.duckdb"
 
-TOTAL=$(sqlite3 "$DB_FILE" "SELECT COUNT(*) FROM puzzles;")
+TOTAL=$(duckdb -csv "$DB_FILE" "SELECT COUNT(*) FROM puzzles;" | tail -1)
 
-QUERY=""
-for i in "${!THEMES[@]}"; do
-	theme="${THEMES[$i]}"
-	col="theme_bits_a"
-	bit=$((1 << i))
-	if [ "$i" -ge 63 ]; then
-		col="theme_bits_b"
-		bit=$((1 << (i - 63)))
-	fi
-	if [ -z "$QUERY" ]; then
-		QUERY="SELECT '$theme' AS theme, SUM(($col & $bit) != 0) AS cnt FROM puzzles"
-	else
-		QUERY+=" UNION ALL SELECT '$theme', SUM(($col & $bit) != 0) FROM puzzles"
-	fi
-done
-
-ROWS=$(sqlite3 "$DB_FILE" "SELECT theme, cnt FROM ($QUERY) ORDER BY cnt DESC;")
+ROWS=$(duckdb -csv "$DB_FILE" "SELECT theme, COUNT(*) AS cnt FROM (SELECT unnest(themes) AS theme FROM puzzles) GROUP BY theme ORDER BY cnt DESC;" | tail -n +2)
 
 {
 	echo "# Theme Statistics"
@@ -34,7 +16,7 @@ ROWS=$(sqlite3 "$DB_FILE" "SELECT theme, cnt FROM ($QUERY) ORDER BY cnt DESC;")
 	echo "| -- | ----- | ----- | ------------ |"
 
 	rank=1
-	while IFS='|' read -r theme count; do
+	while IFS=',' read -r theme count; do
 		pct=$(awk -v c="$count" -v t="$TOTAL" 'BEGIN { printf "%.1f%%", c / t * 100 }')
 		count_fmt=$(printf "%'.f" "$count")
 		printf "| %d | %s | %s | %s |\n" "$rank" "$theme" "$count_fmt" "$pct"

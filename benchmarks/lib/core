@@ -8,28 +8,13 @@ group_header() {
 	printf "\n${PURPLE}%s${RESET}\n" "$1"
 }
 
-get_bits() {
-	local theme="$1"
-	for i in "${!THEMES[@]}"; do
-		[[ "${THEMES[$i]}" == "$theme" ]] || continue
-		if (( i < 63 )); then
-			echo "a $(( 1 << i ))"
-		else
-			echo "b $(( 1 << (i - 63) ))"
-		fi
-		return
-	done
-	echo "unknown theme: $theme" >&2
-	exit 1
-}
-
 benchmark() {
 	local group="$1" name="$2" sql_data="$3" sql_count="${4:-}"
 	local total=0 start end
 	for (( i=0; i<RUNS; i++ )); do
 		start=$(date +%s%N)
-		sqlite3 "$DB_FILE" "$sql_data" > /dev/null
-		[[ -n "$sql_count" ]] && sqlite3 "$DB_FILE" "$sql_count" > /dev/null
+		duckdb "$DB_FILE" "$sql_data" > /dev/null
+		[[ -n "$sql_count" ]] && duckdb "$DB_FILE" "$sql_count" > /dev/null
 		end=$(date +%s%N)
 		(( total += end - start ))
 	done

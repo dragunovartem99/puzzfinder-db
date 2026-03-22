@@ -2,19 +2,19 @@
 
 group_header "search: rating 1000-2000 + theme fork + sort by rating ASC"
 benchmark "search: rating + fork + sort" "page 1" \
-	"SELECT * FROM puzzles WHERE rating >= 1000 AND rating <= 2000 AND (theme_bits_a & $FORK_MASK) = $FORK_MASK ORDER BY rating ASC LIMIT 20 OFFSET 0;" \
-	"SELECT COUNT(*) FROM puzzles WHERE rating >= 1000 AND rating <= 2000 AND (theme_bits_a & $FORK_MASK) = $FORK_MASK;"
+	"SELECT * FROM puzzles WHERE rating >= 1000 AND rating <= 2000 AND list_contains(themes, 'fork') ORDER BY rating ASC LIMIT 20 OFFSET 0;" \
+	"SELECT COUNT(*) FROM puzzles WHERE rating >= 1000 AND rating <= 2000 AND list_contains(themes, 'fork');"
 benchmark "search: rating + fork + sort" "deep page (OFFSET 1000)" \
-	"SELECT * FROM puzzles WHERE rating >= 1000 AND rating <= 2000 AND (theme_bits_a & $FORK_MASK) = $FORK_MASK ORDER BY rating ASC LIMIT 20 OFFSET 1000;" \
-	"SELECT COUNT(*) FROM puzzles WHERE rating >= 1000 AND rating <= 2000 AND (theme_bits_a & $FORK_MASK) = $FORK_MASK;"
+	"SELECT * FROM puzzles WHERE rating >= 1000 AND rating <= 2000 AND list_contains(themes, 'fork') ORDER BY rating ASC LIMIT 20 OFFSET 1000;" \
+	"SELECT COUNT(*) FROM puzzles WHERE rating >= 1000 AND rating <= 2000 AND list_contains(themes, 'fork');"
 
 group_header "search: theme fork + movesNumber = 2"
 benchmark "search: fork + movesNumber = 2" "page 1" \
-	"SELECT * FROM puzzles WHERE (theme_bits_a & $FORK_MASK) = $FORK_MASK AND movesNumber = 2 LIMIT 20 OFFSET 0;" \
-	"SELECT COUNT(*) FROM puzzles WHERE (theme_bits_a & $FORK_MASK) = $FORK_MASK AND movesNumber = 2;"
+	"SELECT * FROM puzzles WHERE list_contains(themes, 'fork') AND movesNumber = 2 LIMIT 20 OFFSET 0;" \
+	"SELECT COUNT(*) FROM puzzles WHERE list_contains(themes, 'fork') AND movesNumber = 2;"
 benchmark "search: fork + movesNumber = 2" "sort by rating ASC, page 1" \
-	"SELECT * FROM puzzles WHERE (theme_bits_a & $FORK_MASK) = $FORK_MASK AND movesNumber = 2 ORDER BY rating ASC LIMIT 20 OFFSET 0;" \
-	"SELECT COUNT(*) FROM puzzles WHERE (theme_bits_a & $FORK_MASK) = $FORK_MASK AND movesNumber = 2;"
+	"SELECT * FROM puzzles WHERE list_contains(themes, 'fork') AND movesNumber = 2 ORDER BY rating ASC LIMIT 20 OFFSET 0;" \
+	"SELECT COUNT(*) FROM puzzles WHERE list_contains(themes, 'fork') AND movesNumber = 2;"
 
 group_header "search: rating 1200-1800 + movesNumber = 2 + sort by rating ASC"
 benchmark "search: rating + movesNumber + sort" "page 1" \
@@ -23,8 +23,8 @@ benchmark "search: rating + movesNumber + sort" "page 1" \
 
 group_header "search: theme fork + popularity >= 90"
 benchmark "search: fork + popularity >= 90" "page 1" \
-	"SELECT * FROM puzzles WHERE (theme_bits_a & $FORK_MASK) = $FORK_MASK AND popularity >= 90 LIMIT 20 OFFSET 0;" \
-	"SELECT COUNT(*) FROM puzzles WHERE (theme_bits_a & $FORK_MASK) = $FORK_MASK AND popularity >= 90;"
+	"SELECT * FROM puzzles WHERE list_contains(themes, 'fork') AND popularity >= 90 LIMIT 20 OFFSET 0;" \
+	"SELECT COUNT(*) FROM puzzles WHERE list_contains(themes, 'fork') AND popularity >= 90;"
 benchmark "search: fork + popularity >= 90" "sort by popularity DESC, page 1" \
-	"SELECT * FROM puzzles WHERE (theme_bits_a & $FORK_MASK) = $FORK_MASK AND popularity >= 90 ORDER BY popularity DESC LIMIT 20 OFFSET 0;" \
-	"SELECT COUNT(*) FROM puzzles WHERE (theme_bits_a & $FORK_MASK) = $FORK_MASK AND popularity >= 90;"
+	"SELECT * FROM puzzles WHERE list_contains(themes, 'fork') AND popularity >= 90 ORDER BY popularity DESC LIMIT 20 OFFSET 0;" \
+	"SELECT COUNT(*) FROM puzzles WHERE list_contains(themes, 'fork') AND popularity >= 90;"

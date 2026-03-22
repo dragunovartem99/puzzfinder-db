@@ -1,10 +1,9 @@
 #!/bin/bash
 
-. "${BASH_SOURCE%/*}"/"themes/list"
 . "${BASH_SOURCE%/*}"/"utils/print_header"
 
 INPUT_CSV="${BASH_SOURCE%/*}/lichess_db_puzzle.csv"
-DB_FILE="${BASH_SOURCE%/*}/puzzfinder.db"
+DB_FILE="${BASH_SOURCE%/*}/puzzfinder.duckdb"
 SCHEMA_FILE="${BASH_SOURCE%/*}/sql/schema.sql"
 INDEXES_FILE="${BASH_SOURCE%/*}/sql/indexes.sql"
 
@@ -15,12 +14,12 @@ if [ ! -f "$DB_FILE" ] && [ ! -f "$INPUT_CSV" ]; then
 fi
 
 print_header "Inserting schema"
-sqlite3 "$DB_FILE" < "$SCHEMA_FILE"
+duckdb "$DB_FILE" < "$SCHEMA_FILE"
 
 print_header "Importing data"
 . "${BASH_SOURCE%/*}"/"database/import"
 
 print_header "Creating indexes"
-sqlite3 "$DB_FILE" < "$INDEXES_FILE"
+duckdb "$DB_FILE" < "$INDEXES_FILE"
 
 print_header "Database created"
