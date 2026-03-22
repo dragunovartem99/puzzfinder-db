@@ -1,6 +1,6 @@
 # <img src="/logo.png" width="30"> Puzzfinder DB
 
-A SQLite3 database (~1.2GB) for finding chess puzzles
+A DuckDB database (~1GB) for finding chess puzzles
 
 - Single table structure
 - Auto-generated from [Lichess's open puzzle database](https://database.lichess.org/#puzzles)
