@@ -1,6 +1,6 @@
 #!/bin/bash
 
-duckdb "$DB_FILE" <<EOF
+duckdb "$DB_FILE" -c "
 INSERT INTO puzzles
 SELECT
     puzzleid AS puzzleId,
@@ -14,5 +14,5 @@ SELECT
     gameurl AS gameUrl,
     openingtags AS openingTags,
     string_split(themes, ' ') AS themes
-FROM read_csv_auto('$INPUT_CSV');
-EOF
+FROM read_csv('$INPUT_CSV')
+"
