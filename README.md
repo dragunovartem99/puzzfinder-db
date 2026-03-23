@@ -1,6 +1,6 @@
 # <img src="/logo.png" width="30"> Puzzfinder DB
 
-The entire Lichess puzzle database packed into a single DuckDB database
+The entire Lichess puzzle database packed into a single [DuckDB](https://duckdb.org) database
 
 - 5.8M puzzles from [Lichess's open puzzle database](https://database.lichess.org/#puzzles)
 - Single table, indexed on `rating`, `movesNumber`, `popularity`, `nbPlays`
