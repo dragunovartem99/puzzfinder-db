@@ -1,13 +1,20 @@
 #!/bin/bash
 
 . "${BASH_SOURCE%/*}"/"../utils/table_align"
+. "${BASH_SOURCE%/*}/../themes/filter"
 
-ROOT="${BASH_SOURCE%/*}"/".."
-DB_FILE="$ROOT/puzzfinder.duckdb"
+DB_FILE="${BASH_SOURCE%/*}"/"../puzzfinder.db"
+STATS_FILE="${BASH_SOURCE%/*}"/"STATS.md"
 
 TOTAL=$(duckdb -csv "$DB_FILE" "SELECT COUNT(*) FROM puzzles;" | tail -1)
 
-ROWS=$(duckdb -csv "$DB_FILE" "SELECT theme, COUNT(*) AS cnt FROM (SELECT unnest(themes) AS theme FROM puzzles) GROUP BY theme ORDER BY cnt DESC;" | tail -n +2)
+union_query=""
+for theme in "${THEMES[@]}"; do
+	part="SELECT '$theme' AS theme, COUNT(*) AS cnt FROM puzzles WHERE $(theme_filter "$theme")"
+	union_query+="${union_query:+ UNION ALL }$part"
+done
+
+ROWS=$(duckdb -csv "$DB_FILE" "SELECT theme, cnt FROM ($union_query) ORDER BY cnt DESC;" | tail -n +2)
 
 {
 	echo "# Theme Statistics"
@@ -24,8 +31,8 @@ ROWS=$(duckdb -csv "$DB_FILE" "SELECT theme, COUNT(*) AS cnt FROM (SELECT unnest
 		printf "| %d | %s | %s | %s |\n" "$rank" "$theme" "$count_fmt" "$pct"
 		((rank++))
 	done <<< "$ROWS"
-} > "$ROOT/STATS.md"
+} > "$STATS_FILE"
 
-table_align "$ROOT/STATS.md"
+table_align "$STATS_FILE"
 
 echo "STATS.md written"

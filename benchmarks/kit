@@ -1,6 +1,7 @@
 #!/bin/bash
 
 . "${BASH_SOURCE%/*}"/"../utils/table_align"
+. "${BASH_SOURCE%/*}"/"../themes/filter"
 
 PURPLE='\033[0;35m'
 GREEN='\033[0;32m'

@@ -1,0 +1,36 @@
+#!/bin/bash
+
+. "${BASH_SOURCE%/*}"/"list"
+
+theme_filter() {
+	local bits=()
+	for theme in "$@"; do
+		local found=0
+		for i in "${!THEMES[@]}"; do
+			if [[ "${THEMES[$i]}" == "$theme" ]]; then
+				bits+=("$i")
+				found=1
+				break
+			fi
+		done
+		if [[ $found -eq 0 ]]; then
+			echo "Unknown theme: $theme" >&2
+			return 1
+		fi
+	done
+
+	local mask=""
+	for bit in "${bits[@]}"; do
+		if [[ -z "$mask" ]]; then
+			mask="(1::HUGEINT << $bit)"
+		else
+			mask="$mask | (1::HUGEINT << $bit)"
+		fi
+	done
+
+	if [[ ${#bits[@]} -eq 1 ]]; then
+		echo "(theme_mask & $mask) != 0"
+	else
+		echo "(theme_mask & ($mask)) = $mask"
+	fi
+}

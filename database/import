@@ -1,5 +1,12 @@
 #!/bin/bash
 
+. "${BASH_SOURCE%/*}/../themes/list"
+
+mask_expr="(0::HUGEINT)"
+for i in "${!THEMES[@]}"; do
+	mask_expr+=" | (CASE WHEN list_contains(string_split(themes, ' '), '${THEMES[$i]}') THEN 1::HUGEINT << $i ELSE 0 END)"
+done
+
 duckdb "$DB_FILE" -c "
 INSERT INTO puzzles
 SELECT
@@ -13,6 +20,6 @@ SELECT
     nbplays AS nbPlays,
     gameurl AS gameUrl,
     openingtags AS openingTags,
-    string_split(themes, ' ') AS themes
-FROM read_csv('$INPUT_CSV')
+    ${mask_expr} AS theme_mask
+FROM read_csv('$INPUT_CSV');
 "
