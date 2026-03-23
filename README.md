@@ -3,7 +3,7 @@
 - 5.8M puzzles from [Lichess's open puzzle database](https://database.lichess.org/#puzzles)
 - Single table, indexed on `rating`, `movesNumber`, `popularity`, `nbPlays`
 - 72 themes encoded as a `HUGEINT` bitmask — fast bitwise filtering
-- Single-file (~1GB), single-process — no server required
+- Single-file (~1GB), single-process — no server required ([DuckDB](https://duckdb.org))
 
 <img width="256" src="https://github.com/user-attachments/assets/0fc16e36-655b-49df-865d-4fa6b65cbf42" />
 
