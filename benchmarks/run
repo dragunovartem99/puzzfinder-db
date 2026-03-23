@@ -1,6 +1,8 @@
 #!/bin/bash
 
 . "${BASH_SOURCE%/*}"/"kit"
+. "${BASH_SOURCE%/*}"/"../utils/table_align"
+. "${BASH_SOURCE%/*}"/"../themes/filter"
 
 ROOT="${BASH_SOURCE%/*}"/".."
 DB_FILE="${BASH_SOURCE%/*}"/"../puzzfinder.db"
