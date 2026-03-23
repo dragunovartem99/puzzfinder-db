@@ -35,6 +35,7 @@ Use `themes/filter` to generate SQL filter expressions:
 
 ```bash
 source themes/filter && theme_filter fork pin
+
 # (theme_mask & ((1::HUGEINT << 29) | (1::HUGEINT << 55))) = ((1::HUGEINT << 29) | (1::HUGEINT << 55))
 ```
 
@@ -52,6 +53,7 @@ Downloads the Lichess puzzle CSV, imports it into DuckDB, and builds indexes.
 
 ```sql
 -- Fork + pin puzzles, rating 1900–2100, sorted by popularity
+
 SELECT puzzleId, fen, moves, rating
 FROM puzzles
 WHERE rating BETWEEN 1900 AND 2100
@@ -59,7 +61,3 @@ WHERE rating BETWEEN 1900 AND 2100
 ORDER BY popularity DESC
 LIMIT 20;
 ```
-
-## Benchmarks
-
-See [BENCHMARKS.md](./BENCHMARKS.md) — queries typically run in **32–164ms**
