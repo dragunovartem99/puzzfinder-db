@@ -1,6 +1,8 @@
 #!/bin/bash
 
-ROOT="${BASH_SOURCE%/*}/.."
+. "${BASH_SOURCE%/*}"/"../utils/table_align"
+
+ROOT="${BASH_SOURCE%/*}"/".."
 DB_FILE="$ROOT/puzzfinder.duckdb"
 
 TOTAL=$(duckdb -csv "$DB_FILE" "SELECT COUNT(*) FROM puzzles;" | tail -1)
@@ -24,6 +26,6 @@ ROWS=$(duckdb -csv "$DB_FILE" "SELECT theme, COUNT(*) AS cnt FROM (SELECT unnest
 	done <<< "$ROWS"
 } > "$ROOT/STATS.md"
 
-"${BASH_SOURCE%/*}/../utils/table_align" "$ROOT/STATS.md"
+table_align "$ROOT/STATS.md"
 
 echo "STATS.md written"

@@ -1,0 +1,63 @@
+#!/bin/bash
+
+. "${BASH_SOURCE%/*}"/"../utils/table_align"
+
+PURPLE='\033[0;35m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+RED='\033[0;31m'
+RESET='\033[0m'
+
+_GROUP=''
+
+trap 'echo; exit 130' INT
+
+group() {
+	_GROUP="$1"
+	printf "\n${PURPLE}%s${RESET}\n" "$1"
+}
+
+benchmark() {
+	local name="$1" sql_data="$2" sql_count="${3:-}"
+
+	local total=0 start end
+
+	for ((i = 0; i < RUNS; i++)); do
+		start=$(date +%s%N)
+		duckdb "$DB_FILE" "$sql_data" > /dev/null
+		[[ -n "$sql_count" ]] && duckdb "$DB_FILE" "$sql_count" > /dev/null
+		end=$(date +%s%N)
+		((total += end - start))
+	done
+
+	local avg=$((total / RUNS / 1000000))
+
+	local color
+	if ((avg < 100)); then color=$GREEN
+	elif ((avg < 200)); then color=$YELLOW
+	else color=$RED
+	fi
+
+	printf "  %-50s ${color}%4d ms avg${RESET}\n" "$name" "$avg"
+
+	ROWS+=("| $_GROUP | $name | $avg |")
+}
+
+run_suite() {
+	local filter="${1:+WHERE $1}"
+	local page="LIMIT 20 OFFSET 0"
+
+	benchmark "count: false" \
+		"SELECT * FROM puzzles ${filter} ${page};"
+
+	benchmark "count: true" \
+		"SELECT * FROM puzzles ${filter} ${page};" \
+		"SELECT COUNT(*) FROM puzzles ${filter};"
+
+	benchmark "count: false, sort: rating DESC" \
+		"SELECT * FROM puzzles ${filter} ORDER BY rating DESC ${page};"
+
+	benchmark "count: true, sort: rating ASC" \
+		"SELECT * FROM puzzles ${filter} ORDER BY rating ASC ${page};" \
+		"SELECT COUNT(*) FROM puzzles ${filter};"
+}

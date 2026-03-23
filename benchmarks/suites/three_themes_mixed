@@ -1,0 +1,4 @@
+#!/bin/bash
+
+group "three themes (common and uncommon)"
+run_suite "list_contains(themes, 'fork') AND list_contains(themes, 'pin') AND list_contains(themes, 'masterVsMaster')"

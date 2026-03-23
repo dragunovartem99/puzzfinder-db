@@ -1,0 +1,4 @@
+#!/bin/bash
+
+group "no filters"
+run_suite ""

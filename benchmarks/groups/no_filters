@@ -1,7 +1,0 @@
-group "no filters"
-pagination "page 1" \
-	"SELECT * FROM puzzles LIMIT 20 OFFSET 0;" \
-	"SELECT COUNT(*) FROM puzzles;"
-pagination "deep page" \
-	"SELECT * FROM puzzles LIMIT 20 OFFSET 10000;" \
-	"SELECT COUNT(*) FROM puzzles;"

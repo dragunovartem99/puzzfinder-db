@@ -1,0 +1,4 @@
+#!/bin/bash
+
+group "one theme (common)"
+run_suite "list_contains(themes, 'fork')"

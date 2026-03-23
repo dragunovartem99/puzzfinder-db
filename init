@@ -1,12 +1,12 @@
 #!/bin/bash
 set -e
 
-. "${BASH_SOURCE%/*}/utils/print_header"
+. "${BASH_SOURCE%/*}"/"utils/print_header"
 
-INPUT_CSV="${BASH_SOURCE%/*}/lichess_db_puzzle.csv"
-DB_FILE="${BASH_SOURCE%/*}/puzzfinder.db"
-SCHEMA_FILE="${BASH_SOURCE%/*}/sql/schema.sql"
-INDEXES_FILE="${BASH_SOURCE%/*}/sql/indexes.sql"
+INPUT_CSV="${BASH_SOURCE%/*}"/"lichess_db_puzzle.csv"
+DB_FILE="${BASH_SOURCE%/*}"/"puzzfinder.db"
+SCHEMA_FILE="${BASH_SOURCE%/*}"/"sql/schema.sql"
+INDEXES_FILE="${BASH_SOURCE%/*}"/"sql/indexes.sql"
 
 rm -f "$DB_FILE"
 
@@ -20,7 +20,7 @@ print_header "Inserting schema"
 duckdb "$DB_FILE" -f "$SCHEMA_FILE"
 
 print_header "Importing data"
-. "${BASH_SOURCE%/*}/database/import"
+. "${BASH_SOURCE%/*}"/"database/import"
 
 print_header "Creating indexes"
 duckdb "$DB_FILE" -f "$INDEXES_FILE"

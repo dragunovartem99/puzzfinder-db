@@ -1,0 +1,4 @@
+#!/bin/bash
+
+group "two themes (uncommon)"
+run_suite "list_contains(themes, 'masterVsMaster') AND list_contains(themes, 'endgame')"

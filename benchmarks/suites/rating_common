@@ -1,0 +1,4 @@
+#!/bin/bash
+
+group "rating filter (common)"
+run_suite "rating >= 1400 AND rating <= 1600"

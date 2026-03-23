@@ -1,0 +1,5 @@
+#!/bin/bash
+
+group "direct access"
+benchmark "no pagination" \
+	"SELECT * FROM puzzles WHERE puzzleId = (SELECT puzzleId FROM puzzles LIMIT 1 OFFSET 5000) LIMIT 1;"

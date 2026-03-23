@@ -1,9 +1,0 @@
-group "theme: fork"
-pagination "page 1" \
-	"SELECT * FROM puzzles WHERE list_contains(themes, 'fork') LIMIT 20 OFFSET 0;" \
-	"SELECT COUNT(*) FROM puzzles WHERE list_contains(themes, 'fork');"
-
-group "theme: masterVsMaster"
-pagination "page 1" \
-	"SELECT * FROM puzzles WHERE list_contains(themes, 'masterVsMaster') LIMIT 20 OFFSET 0;" \
-	"SELECT COUNT(*) FROM puzzles WHERE list_contains(themes, 'masterVsMaster');"

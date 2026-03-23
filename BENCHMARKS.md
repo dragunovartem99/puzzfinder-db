@@ -2,35 +2,50 @@
 
 _5 iterations · DuckDB v1.5.0_
 
-| Group                                 | Query                         | ms avg |
-| ------------------------------------- | ----------------------------- | ------ |
-| direct lookup                         | puzzleId = '03JSh'            | 27     |
-| no filters                            | page 1                        | 59     |
-| no filters                            | deep page                     | 59     |
-| sort by rating                        | ASC                           | 68     |
-| sort by rating                        | DESC                          | 94     |
-| sort by popularity                    | DESC                          | 62     |
-| sort by nbPlays                       | DESC                          | 93     |
-| sort by movesNumber                   | ASC                           | 62     |
-| rating 1200-1800                      | page 1                        | 70     |
-| rating 1200-1800                      | sort by rating ASC            | 84     |
-| movesNumber = 1                       | page 1                        | 318    |
-| movesNumber = 2                       | page 1                        | 966    |
-| movesNumber = 2                       | sort by rating ASC            | 525    |
-| movesNumber = 2                       | deep page                     | 992    |
-| popularity >= 90                      | page 1                        | 149    |
-| popularity >= 90                      | sort by popularity DESC       | 107    |
-| popularity <= 50                      | page 1                        | 75     |
-| theme: fork                           | page 1                        | 126    |
-| theme: masterVsMaster                 | page 1                        | 137    |
-| themes: fork + pin                    | page 1                        | 147    |
-| themes: fork + short                  | page 1                        | 137    |
-| rating 1200-1800, movesNumber = 2     | sort by rating ASC            | 92     |
-| rating 1200-1800, popularity >= 90    | page 1                        | 74     |
-| rating 1200-1800, popularity >= 90    | sort by rating ASC            | 94     |
-| theme: pin, rating 1000-2000          | sort by rating ASC            | 218    |
-| theme: pin, rating 1000-2000          | sort by rating ASC, deep page | 228    |
-| theme: sacrifice, movesNumber = 2     | page 1                        | 125    |
-| theme: sacrifice, movesNumber = 2     | sort by rating ASC            | 220    |
-| theme: hangingPiece, popularity >= 90 | page 1                        | 127    |
-| theme: hangingPiece, popularity >= 90 | sort by popularity DESC       | 155    |
+| Group                              | Case                            | ms avg |
+| ---------------------------------- | ------------------------------- | ------ |
+| direct access                      | no pagination                   | 34     |
+| no filters                         | count: false                    | 39     |
+| no filters                         | count: true                     | 60     |
+| no filters                         | count: false, sort: rating DESC | 70     |
+| no filters                         | count: true, sort: rating ASC   | 71     |
+| one theme (common)                 | count: false                    | 41     |
+| one theme (common)                 | count: true                     | 136    |
+| one theme (common)                 | count: false, sort: rating DESC | 142    |
+| one theme (common)                 | count: true, sort: rating ASC   | 232    |
+| one theme (uncommon)               | count: false                    | 39     |
+| one theme (uncommon)               | count: true                     | 136    |
+| one theme (uncommon)               | count: false, sort: rating DESC | 144    |
+| one theme (uncommon)               | count: true, sort: rating ASC   | 235    |
+| two themes (common)                | count: false                    | 41     |
+| two themes (common)                | count: true                     | 141    |
+| two themes (common)                | count: false, sort: rating DESC | 148    |
+| two themes (common)                | count: true, sort: rating ASC   | 244    |
+| two themes (uncommon)              | count: false                    | 41     |
+| two themes (uncommon)              | count: true                     | 139    |
+| two themes (uncommon)              | count: false, sort: rating DESC | 147    |
+| two themes (uncommon)              | count: true, sort: rating ASC   | 244    |
+| two themes (common and uncommon)   | count: false                    | 41     |
+| two themes (common and uncommon)   | count: true                     | 141    |
+| two themes (common and uncommon)   | count: false, sort: rating DESC | 150    |
+| two themes (common and uncommon)   | count: true, sort: rating ASC   | 243    |
+| three themes (common)              | count: false                    | 60     |
+| three themes (common)              | count: true                     | 158    |
+| three themes (common)              | count: false, sort: rating DESC | 148    |
+| three themes (common)              | count: true, sort: rating ASC   | 246    |
+| three themes (uncommon)            | count: false                    | 479    |
+| three themes (uncommon)            | count: true                     | 570    |
+| three themes (uncommon)            | count: false, sort: rating DESC | 111    |
+| three themes (uncommon)            | count: true, sort: rating ASC   | 209    |
+| three themes (common and uncommon) | count: false                    | 78     |
+| three themes (common and uncommon) | count: true                     | 179    |
+| three themes (common and uncommon) | count: false, sort: rating DESC | 141    |
+| three themes (common and uncommon) | count: true, sort: rating ASC   | 248    |
+| rating filter (common)             | count: false                    | 43     |
+| rating filter (common)             | count: true                     | 74     |
+| rating filter (common)             | count: false, sort: rating DESC | 59     |
+| rating filter (common)             | count: true, sort: rating ASC   | 89     |
+| rating filter (uncommon)           | count: false                    | 43     |
+| rating filter (uncommon)           | count: true                     | 72     |
+| rating filter (uncommon)           | count: false, sort: rating DESC | 63     |
+| rating filter (uncommon)           | count: true, sort: rating ASC   | 92     |

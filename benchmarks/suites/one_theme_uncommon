@@ -1,0 +1,4 @@
+#!/bin/bash
+
+group "one theme (uncommon)"
+run_suite "list_contains(themes, 'masterVsMaster')"

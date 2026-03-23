@@ -1,5 +1,0 @@
-SAMPLE_ID=$(duckdb -csv "$DB_FILE" "SELECT puzzleId FROM puzzles LIMIT 1 OFFSET 5000;" | tail -1)
-
-group "direct lookup"
-query "puzzleId = '$SAMPLE_ID'" \
-	"SELECT * FROM puzzles WHERE puzzleId = '$SAMPLE_ID' LIMIT 1;"

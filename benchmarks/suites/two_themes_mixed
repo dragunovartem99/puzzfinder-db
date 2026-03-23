@@ -1,0 +1,4 @@
+#!/bin/bash
+
+group "two themes (common and uncommon)"
+run_suite "list_contains(themes, 'fork') AND list_contains(themes, 'short')"

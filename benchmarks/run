@@ -1,9 +1,9 @@
 #!/bin/bash
 
-. "${BASH_SOURCE%/*}/lib/core"
+. "${BASH_SOURCE%/*}"/"kit"
 
-ROOT="${BASH_SOURCE%/*}/.."
-DB_FILE="$ROOT/puzzfinder.db"
+ROOT="${BASH_SOURCE%/*}"/".."
+DB_FILE="${BASH_SOURCE%/*}"/"../puzzfinder.db"
 RUNS="${1:-5}"
 
 declare -a ROWS
@@ -11,26 +11,29 @@ declare -a ROWS
 echo "Running $RUNS iterations per query"
 echo
 
-# direct lookup
-. "${BASH_SOURCE%/*}/groups/get_by_id"
+# direct access
+. "${BASH_SOURCE%/*}"/"suites/get_by_id"
 
-# unfiltered
-. "${BASH_SOURCE%/*}/groups/no_filters"
-. "${BASH_SOURCE%/*}/groups/sort"
+# no filters
+. "${BASH_SOURCE%/*}"/"suites/no_filters"
 
-# single filter
-. "${BASH_SOURCE%/*}/groups/rating"
-. "${BASH_SOURCE%/*}/groups/moves"
-. "${BASH_SOURCE%/*}/groups/popularity"
-. "${BASH_SOURCE%/*}/groups/theme"
-. "${BASH_SOURCE%/*}/groups/themes"
+# one theme
+. "${BASH_SOURCE%/*}"/"suites/one_theme_common"
+. "${BASH_SOURCE%/*}"/"suites/one_theme_uncommon"
 
-# combined filters
-. "${BASH_SOURCE%/*}/groups/rating_and_moves"
-. "${BASH_SOURCE%/*}/groups/rating_and_popularity"
-. "${BASH_SOURCE%/*}/groups/theme_and_rating"
-. "${BASH_SOURCE%/*}/groups/theme_and_moves"
-. "${BASH_SOURCE%/*}/groups/theme_and_popularity"
+# two themes
+. "${BASH_SOURCE%/*}"/"suites/two_themes_common"
+. "${BASH_SOURCE%/*}"/"suites/two_themes_uncommon"
+. "${BASH_SOURCE%/*}"/"suites/two_themes_mixed"
+
+# three themes
+. "${BASH_SOURCE%/*}"/"suites/three_themes_common"
+. "${BASH_SOURCE%/*}"/"suites/three_themes_uncommon"
+. "${BASH_SOURCE%/*}"/"suites/three_themes_mixed"
+
+# rating filter
+. "${BASH_SOURCE%/*}"/"suites/rating_common"
+. "${BASH_SOURCE%/*}"/"suites/rating_uncommon"
 
 DUCKDB_VERSION=$(duckdb --version | awk '{print $1}')
 
@@ -39,12 +42,12 @@ DUCKDB_VERSION=$(duckdb --version | awk '{print $1}')
 	echo ""
 	echo "_${RUNS} iterations · DuckDB ${DUCKDB_VERSION}_"
 	echo ""
-	echo "| Group | Query | ms avg |"
-	echo "| ----- | ----- | ------ |"
+	echo "| Group | Case | ms avg |"
+	echo "| ----- | ---- | ------ |"
 	printf '%s\n' "${ROWS[@]}"
 } > "$ROOT/BENCHMARKS.md"
 
-"${BASH_SOURCE%/*}/../utils/table_align" "$ROOT/BENCHMARKS.md"
+table_align "$ROOT/BENCHMARKS.md"
 
 echo
 echo "BENCHMARKS.md written"
