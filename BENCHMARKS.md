@@ -2,7 +2,7 @@
 
 _5 iterations · DuckDB v1.5.0_
 
-> *mixed* — common and uncommon themes combined
+> **mixed** — common and uncommon themes combined
 
 | Group                              | Case                            | ms avg |
 | ---------------------------------- | ------------------------------- | ------ |
