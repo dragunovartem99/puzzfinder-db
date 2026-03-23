@@ -44,6 +44,8 @@ DUCKDB_VERSION=$(duckdb --version | awk '{print $1}')
 	echo ""
 	echo "_${RUNS} iterations · DuckDB ${DUCKDB_VERSION}_"
 	echo ""
+	echo "> *mixed* — common and uncommon themes combined"
+	echo ""
 	echo "| Group | Case | ms avg |"
 	echo "| ----- | ---- | ------ |"
 	printf '%s\n' "${ROWS[@]}"
