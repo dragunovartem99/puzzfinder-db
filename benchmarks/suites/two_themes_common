@@ -1,4 +1,4 @@
 #!/bin/bash
 
 group "two themes (common)"
-run_suite "$(theme_filter fork pin)"
+run_suite "$(theme_filter mate sacrifice)"

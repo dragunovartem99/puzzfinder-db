@@ -1,4 +1,4 @@
 #!/bin/bash
 
 group "two themes (uncommon)"
-run_suite "$(theme_filter masterVsMaster endgame)"
+run_suite "$(theme_filter bodenMate masterVsMaster)"

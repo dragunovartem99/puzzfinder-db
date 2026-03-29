@@ -1,4 +1,4 @@
 #!/bin/bash
 
 group "one theme (uncommon)"
-run_suite "$(theme_filter masterVsMaster)"
+run_suite "$(theme_filter underPromotion)"

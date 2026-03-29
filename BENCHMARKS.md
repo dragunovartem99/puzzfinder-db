@@ -4,50 +4,50 @@ _5 iterations · DuckDB v1.5.0_
 
 > **mixed** — common and uncommon themes combined
 
-| Group                              | Case                            | ms avg |
-| ---------------------------------- | ------------------------------- | ------ |
-| direct access                      | no pagination                   | 32     |
-| no filters                         | count: false                    | 32     |
-| no filters                         | count: true                     | 51     |
-| no filters                         | count: false, sort: rating DESC | 54     |
-| no filters                         | count: true, sort: rating ASC   | 57     |
-| one theme (common)                 | count: false                    | 33     |
-| one theme (common)                 | count: true                     | 93     |
-| one theme (common)                 | count: false, sort: rating DESC | 101    |
-| one theme (common)                 | count: true, sort: rating ASC   | 162    |
-| one theme (uncommon)               | count: false                    | 33     |
-| one theme (uncommon)               | count: true                     | 98     |
-| one theme (uncommon)               | count: false, sort: rating DESC | 101    |
-| one theme (uncommon)               | count: true, sort: rating ASC   | 164    |
-| two themes (common)                | count: false                    | 35     |
-| two themes (common)                | count: true                     | 99     |
-| two themes (common)                | count: false, sort: rating DESC | 100    |
-| two themes (common)                | count: true, sort: rating ASC   | 163    |
-| two themes (uncommon)              | count: false                    | 34     |
-| two themes (uncommon)              | count: true                     | 98     |
-| two themes (uncommon)              | count: false, sort: rating DESC | 100    |
-| two themes (uncommon)              | count: true, sort: rating ASC   | 168    |
-| two themes (mixed)                 | count: false                    | 34     |
-| two themes (mixed)                 | count: true                     | 97     |
-| two themes (mixed)                 | count: false, sort: rating DESC | 100    |
-| two themes (mixed)                 | count: true, sort: rating ASC   | 160    |
-| three themes (common)              | count: false                    | 45     |
-| three themes (common)              | count: true                     | 110    |
-| three themes (common)              | count: false, sort: rating DESC | 101    |
-| three themes (common)              | count: true, sort: rating ASC   | 163    |
-| three themes (uncommon)            | count: false                    | 243    |
-| three themes (uncommon)            | count: true                     | 302    |
-| three themes (uncommon)            | count: false, sort: rating DESC | 75     |
-| three themes (uncommon)            | count: true, sort: rating ASC   | 141    |
-| three themes (mixed)               | count: false                    | 53     |
-| three themes (mixed)               | count: true                     | 117    |
-| three themes (mixed)               | count: false, sort: rating DESC | 99     |
-| three themes (mixed)               | count: true, sort: rating ASC   | 160    |
-| rating filter (common)             | count: false                    | 34     |
-| rating filter (common)             | count: true                     | 63     |
-| rating filter (common)             | count: false, sort: rating DESC | 46     |
-| rating filter (common)             | count: true, sort: rating ASC   | 72     |
-| rating filter (uncommon)           | count: false                    | 34     |
-| rating filter (uncommon)           | count: true                     | 62     |
-| rating filter (uncommon)           | count: false, sort: rating DESC | 50     |
-| rating filter (uncommon)           | count: true, sort: rating ASC   | 77     |
+| Group                    | Case                            | ms avg |
+| ------------------------ | ------------------------------- | ------ |
+| direct access            | no pagination                   | 32     |
+| no filters               | count: false                    | 32     |
+| no filters               | count: true                     | 52     |
+| no filters               | count: false, sort: rating DESC | 52     |
+| no filters               | count: true, sort: rating ASC   | 58     |
+| one theme (common)       | count: false                    | 34     |
+| one theme (common)       | count: true                     | 97     |
+| one theme (common)       | count: false, sort: rating DESC | 99     |
+| one theme (common)       | count: true, sort: rating ASC   | 156    |
+| one theme (uncommon)     | count: false                    | 45     |
+| one theme (uncommon)     | count: true                     | 107    |
+| one theme (uncommon)     | count: false, sort: rating DESC | 103    |
+| one theme (uncommon)     | count: true, sort: rating ASC   | 157    |
+| two themes (common)      | count: false                    | 34     |
+| two themes (common)      | count: true                     | 95     |
+| two themes (common)      | count: false, sort: rating DESC | 104    |
+| two themes (common)      | count: true, sort: rating ASC   | 161    |
+| two themes (uncommon)    | count: false                    | 254    |
+| two themes (uncommon)    | count: true                     | 318    |
+| two themes (uncommon)    | count: false, sort: rating DESC | 92     |
+| two themes (uncommon)    | count: true, sort: rating ASC   | 155    |
+| two themes (mixed)       | count: false                    | 35     |
+| two themes (mixed)       | count: true                     | 95     |
+| two themes (mixed)       | count: false, sort: rating DESC | 103    |
+| two themes (mixed)       | count: true, sort: rating ASC   | 161    |
+| three themes (common)    | count: false                    | 245    |
+| three themes (common)    | count: true                     | 311    |
+| three themes (common)    | count: false, sort: rating DESC | 83     |
+| three themes (common)    | count: true, sort: rating ASC   | 145    |
+| three themes (uncommon)  | count: false                    | 255    |
+| three themes (uncommon)  | count: true                     | 310    |
+| three themes (uncommon)  | count: false, sort: rating DESC | 83     |
+| three themes (uncommon)  | count: true, sort: rating ASC   | 148    |
+| three themes (mixed)     | count: false                    | 251    |
+| three themes (mixed)     | count: true                     | 318    |
+| three themes (mixed)     | count: false, sort: rating DESC | 84     |
+| three themes (mixed)     | count: true, sort: rating ASC   | 145    |
+| rating filter (common)   | count: false                    | 34     |
+| rating filter (common)   | count: true                     | 62     |
+| rating filter (common)   | count: false, sort: rating DESC | 46     |
+| rating filter (common)   | count: true, sort: rating ASC   | 72     |
+| rating filter (uncommon) | count: false                    | 35     |
+| rating filter (uncommon) | count: true                     | 62     |
+| rating filter (uncommon) | count: false, sort: rating DESC | 64     |
+| rating filter (uncommon) | count: true, sort: rating ASC   | 83     |

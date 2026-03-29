@@ -1,4 +1,4 @@
 #!/bin/bash
 
 group "three themes (mixed)"
-run_suite "$(theme_filter fork pin masterVsMaster)"
+run_suite "$(theme_filter kingsideAttack rookEndgame arabianMate)"

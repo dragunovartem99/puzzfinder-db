@@ -1,4 +1,4 @@
 #!/bin/bash
 
 group "rating filter (uncommon)"
-run_suite "rating >= 2400 AND rating <= 2600"
+run_suite "rating >= 2800 AND rating <= 3000"

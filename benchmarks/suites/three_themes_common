@@ -1,4 +1,4 @@
 #!/bin/bash
 
 group "three themes (common)"
-run_suite "$(theme_filter fork pin mate)"
+run_suite "$(theme_filter endgame crushing mateIn2)"

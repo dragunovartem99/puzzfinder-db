@@ -1,4 +1,4 @@
 #!/bin/bash
 
 group "two themes (mixed)"
-run_suite "$(theme_filter fork short)"
+run_suite "$(theme_filter long pin)"
