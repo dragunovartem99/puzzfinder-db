@@ -1,0 +1,39 @@
+#!/bin/bash
+
+. "${BASH_SOURCE[0]%/*}/../utils/table_align"
+. "${BASH_SOURCE[0]%/*}/../themes/filter"
+
+DB_FILE="${BASH_SOURCE[0]%/*}/../puzzfinder.db"
+STATS_FILE="${BASH_SOURCE[0]%/*}/../STATS.md"
+
+TOTAL=$(duckdb -csv "$DB_FILE" "SELECT COUNT(*) FROM puzzles;" | tail -1)
+TOTAL_FMT=$(printf "%'.f" "$TOTAL")
+
+declare -a BLOCK_FILES
+
+block() {
+	local dir="${BASH_SOURCE[0]%/*}"
+	local tmp
+	tmp=$(mktemp)
+	BLOCK_OUTPUT="$tmp"
+	. "$dir/blocks/$1"
+	table_align "$tmp"
+	BLOCK_FILES+=("$tmp")
+}
+
+block themes
+block ratings
+
+{
+	echo "# Statistics"
+	echo ""
+	echo "Total puzzles: **${TOTAL_FMT}**"
+	echo ""
+	for i in "${!BLOCK_FILES[@]}"; do
+		cat "${BLOCK_FILES[$i]}"
+		[[ $i -lt $((${#BLOCK_FILES[@]} - 1)) ]] && echo ""
+		rm "${BLOCK_FILES[$i]}"
+	done
+} > "$STATS_FILE"
+
+echo "STATS.md written"

@@ -1,0 +1,34 @@
+#!/bin/bash
+
+ROWS=$(duckdb -csv "$DB_FILE" "
+	WITH bucketed AS (
+		SELECT rating, (FLOOR((rating - 399) / 100) * 100 + 399)::INTEGER AS bucket
+		FROM puzzles
+	)
+	SELECT range, cnt FROM (
+		SELECT
+			CASE
+				WHEN rating < 399   THEN '< 399'
+				WHEN rating >= 3399 THEN '>= 3399'
+				ELSE bucket::VARCHAR || '-' || (bucket + 100)::VARCHAR
+			END AS range,
+			COUNT(*) AS cnt,
+			MIN(rating) AS min_r
+		FROM bucketed
+		GROUP BY range
+	)
+	ORDER BY min_r;
+" | tail -n +2)
+
+{
+	echo "## Ratings"
+	echo ""
+	echo "| Rating Range | Count | % of puzzles |"
+	echo "| ------------ | ----- | ------------ |"
+
+	while IFS=',' read -r range count; do
+		pct=$(awk -v c="$count" -v t="$TOTAL" 'BEGIN { printf "%.1f%%", c / t * 100 }')
+		count_fmt=$(printf "%'.f" "$count")
+		printf "| %s | %s | %s |\n" "$range" "$count_fmt" "$pct"
+	done <<< "$ROWS"
+} > "$BLOCK_OUTPUT"

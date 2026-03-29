@@ -1,13 +1,5 @@
 #!/bin/bash
 
-. "${BASH_SOURCE%/*}"/"../utils/table_align"
-. "${BASH_SOURCE%/*}/../themes/filter"
-
-DB_FILE="${BASH_SOURCE%/*}"/"../puzzfinder.db"
-STATS_FILE="${BASH_SOURCE%/*}"/"STATS.md"
-
-TOTAL=$(duckdb -csv "$DB_FILE" "SELECT COUNT(*) FROM puzzles;" | tail -1)
-
 union_query=""
 for theme in "${THEMES[@]}"; do
 	part="SELECT '$theme' AS theme, COUNT(*) AS cnt FROM puzzles WHERE $(theme_filter "$theme")"
@@ -17,12 +9,10 @@ done
 ROWS=$(duckdb -csv "$DB_FILE" "SELECT theme, cnt FROM ($union_query) ORDER BY cnt DESC;" | tail -n +2)
 
 {
-	echo "# Theme Statistics"
+	echo "## Themes"
 	echo ""
-	echo "Total puzzles: **$(printf "%'.f" "$TOTAL")**"
-	echo ""
-	echo "| #  | Theme | Count | % of puzzles |"
-	echo "| -- | ----- | ----- | ------------ |"
+	echo "| # | Theme | Count | % of puzzles |"
+	echo "| - | ----- | ----- | ------------ |"
 
 	rank=1
 	while IFS=',' read -r theme count; do
@@ -31,8 +21,4 @@ ROWS=$(duckdb -csv "$DB_FILE" "SELECT theme, cnt FROM ($union_query) ORDER BY cn
 		printf "| %d | %s | %s | %s |\n" "$rank" "$theme" "$count_fmt" "$pct"
 		((rank++))
 	done <<< "$ROWS"
-} > "$STATS_FILE"
-
-table_align "$STATS_FILE"
-
-echo "STATS.md written"
+} > "$BLOCK_OUTPUT"

@@ -2,27 +2,32 @@
 
 table_align() {
 	awk '
-	{a[NR]=$0}
+	BEGIN { in_table = 0; cur_block = 0 }
 	/^\|/ {
+	    if (!in_table) { in_table = 1; cur_block = NR }
+	    block[NR] = cur_block
 	    n = split($0, f, "|")
 	    for (i = 2; i < n; i++) {
 	        gsub(/^ +| +$/, "", f[i])
-	        if (f[i] !~ /^-+$/ && length(f[i]) > w[i])
-	            w[i] = length(f[i])
+	        if (f[i] !~ /^-+$/ && length(f[i]) > w[cur_block, i])
+	            w[cur_block, i] = length(f[i])
 	    }
 	}
+	!/^\|/ { in_table = 0 }
+	{ a[NR] = $0 }
 	END {
 	    for (r = 1; r <= NR; r++) {
 	        if (a[r] !~ /^\|/) { print a[r]; continue }
+	        b = block[r]
 	        n = split(a[r], f, "|")
 	        for (i = 2; i < n; i++) gsub(/^ +| +$/, "", f[i])
 	        printf "|"
 	        for (i = 2; i < n; i++) {
 	            if (f[i] ~ /^-+$/) {
-	                s = sprintf("%-*s", w[i], ""); gsub(/ /, "-", s)
+	                s = sprintf("%-*s", w[b, i], ""); gsub(/ /, "-", s)
 	                printf " %s |", s
 	            } else {
-	                printf " %-*s |", w[i], f[i]
+	                printf " %-*s |", w[b, i], f[i]
 	            }
 	        }
 	        printf "\n"
