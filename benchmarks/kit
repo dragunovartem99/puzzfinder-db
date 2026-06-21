@@ -46,16 +46,9 @@ run_suite() {
 	local page="LIMIT 20 OFFSET 0"
 
 	benchmark "count: false" \
-		"SELECT * FROM puzzles ${filter} ${page};"
+		"SELECT * FROM puzzles ${filter} ORDER BY puzzleId ${page};"
 
 	benchmark "count: true" \
-		"SELECT * FROM puzzles ${filter} ${page};" \
-		"SELECT COUNT(*) FROM puzzles ${filter};"
-
-	benchmark "count: false, sort: rating DESC" \
-		"SELECT * FROM puzzles ${filter} ORDER BY rating DESC ${page};"
-
-	benchmark "count: true, sort: rating ASC" \
-		"SELECT * FROM puzzles ${filter} ORDER BY rating ASC ${page};" \
+		"SELECT * FROM puzzles ${filter} ORDER BY puzzleId ${page};" \
 		"SELECT COUNT(*) FROM puzzles ${filter};"
 }

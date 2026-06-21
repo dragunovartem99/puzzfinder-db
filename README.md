@@ -39,6 +39,14 @@ source themes/filter && theme_filter fork pin
 
 See [STATS.md](./STATS.md) for theme distribution across the database.
 
+## Performance
+
+DuckDB uses the primary key ART index for `ORDER BY puzzleId` and can stop scanning once `LIMIT` is satisfied. Without an `ORDER BY`, it falls back to a full sequential scan of all 6M rows — so **always include `ORDER BY puzzleId`** unless you have a more meaningful sort.
+
+For `COUNT(*)`, there's no early exit — it always scans every matching row.
+
+See [BENCHMARKS.md](./BENCHMARKS.md) for measured query times.
+
 ## Setup
 
 ```bash
