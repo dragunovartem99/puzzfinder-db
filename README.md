@@ -1,6 +1,6 @@
 # <img src="/logo.png" width="30"> Puzzfinder DB
 
-- 5.8M puzzles from [Lichess's open puzzle database](https://database.lichess.org/#puzzles)
+- 6M puzzles from [Lichess's open puzzle database](https://database.lichess.org/#puzzles)
 - Single table, indexed on `rating`, `movesNumber`, `popularity`, `nbPlays`
 - 72 themes encoded as a `HUGEINT` bitmask — fast bitwise filtering
 - Single-file (~1GB), single-process — no server required ([DuckDB](https://duckdb.org))
