@@ -7,6 +7,14 @@
 
 <img width="256" src="https://github.com/user-attachments/assets/0fc16e36-655b-49df-865d-4fa6b65cbf42" />
 
+## Setup
+
+```bash
+./init
+```
+
+Downloads the Lichess puzzle CSV, imports it into DuckDB, and builds indexes.
+
 ## Schema
 
 ```sql
@@ -27,9 +35,17 @@ CREATE TABLE puzzles (
 
 ## Themes
 
-72 Lichess themes — each assigned a fixed bit position in `theme_mask`
+72 Lichess themes are stored as a bitmask in `theme_mask`. Each theme is assigned a fixed bit position (0–71), so a puzzle's themes are represented as a single `HUGEINT` where each set bit indicates the presence of that theme.
 
-Use `themes/filter` to generate SQL filter expressions:
+To filter by theme, you check that the relevant bits are all set:
+
+```sql
+-- puzzles tagged with both "fork" and "pin"
+WHERE (theme_mask & ((1::HUGEINT << 29) | (1::HUGEINT << 55)))
+    = ((1::HUGEINT << 29) | (1::HUGEINT << 55))
+```
+
+Use `themes/filter` to generate these expressions without looking up bit positions manually:
 
 ```bash
 source themes/filter && theme_filter fork pin
@@ -38,22 +54,6 @@ source themes/filter && theme_filter fork pin
 ```
 
 See [STATS.md](./STATS.md) for theme distribution across the database.
-
-## Performance
-
-DuckDB uses the primary key ART index for `ORDER BY puzzleId` and can stop scanning once `LIMIT` is satisfied. Without an `ORDER BY`, it falls back to a full sequential scan of all 6M rows — so **always include `ORDER BY puzzleId`** unless you have a more meaningful sort.
-
-For `COUNT(*)`, there's no early exit — it always scans every matching row.
-
-See [BENCHMARKS.md](./BENCHMARKS.md) for measured query times.
-
-## Setup
-
-```bash
-./init
-```
-
-Downloads the Lichess puzzle CSV, imports it into DuckDB, and builds indexes.
 
 ## Usage
 
@@ -67,3 +67,11 @@ WHERE rating BETWEEN 1900 AND 2100
 ORDER BY popularity DESC
 LIMIT 20;
 ```
+
+## Performance
+
+DuckDB uses the primary key ART index for `ORDER BY puzzleId` and can stop scanning once `LIMIT` is satisfied. Without an `ORDER BY`, it falls back to a full sequential scan of all 6M rows — so **always include `ORDER BY puzzleId`** unless you have a more meaningful sort.
+
+For `COUNT(*)`, there's no early exit — it always scans every matching row.
+
+See [BENCHMARKS.md](./BENCHMARKS.md) for measured query times.
