@@ -8,7 +8,7 @@ DB_FILE="${BASH_SOURCE%/*}"/"puzzfinder.db"
 SCHEMA_FILE="${BASH_SOURCE%/*}"/"sql/schema.sql"
 INDEXES_FILE="${BASH_SOURCE%/*}"/"sql/indexes.sql"
 
-rm -f "$DB_FILE"
+rm -rf "$DB_FILE"
 
 if [ ! -f "$INPUT_CSV" ]; then
 	print_header "Getting .csv"
