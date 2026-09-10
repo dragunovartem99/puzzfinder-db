@@ -1,9 +1,9 @@
 # <img src="/logo.png" width="30"> Puzzfinder DB
 
 - 6M puzzles from [Lichess's open puzzle database](https://database.lichess.org/#puzzles)
-- Single table, indexed on `rating`, `movesNumber`, `popularity`, `nbPlays`
+- Single table, primary key on `puzzleId`, rows stored in `puzzleId` order
 - 72 themes encoded as a `HUGEINT` bitmask — fast bitwise filtering
-- Single-file (~1GB), single-process — no server required ([DuckDB](https://duckdb.org))
+- Single-file (~800MB), single-process — no server required ([DuckDB](https://duckdb.org))
 
 <img width="256" src="https://github.com/user-attachments/assets/0fc16e36-655b-49df-865d-4fa6b65cbf42" />
 
@@ -13,7 +13,7 @@
 ./init
 ```
 
-Downloads the Lichess puzzle CSV, imports it into DuckDB, and builds indexes. Re-running only rebuilds when Lichess has published a newer file; use `FORCE=1 ./init` to rebuild anyway (e.g. after schema changes).
+Downloads the Lichess puzzle CSV, and imports it into DuckDB. Re-running only rebuilds when Lichess has published a newer file; use `FORCE=1 ./init` to rebuild anyway (e.g. after schema changes).
 
 The deploy workflow runs daily and on relevant pushes to `main`, and can be triggered manually from the Actions tab.
 
@@ -75,5 +75,7 @@ LIMIT 20;
 DuckDB uses the primary key ART index for `ORDER BY puzzleId` and can stop scanning once `LIMIT` is satisfied. Without an `ORDER BY`, it falls back to a full sequential scan of all 6M rows — so **always include `ORDER BY puzzleId`** unless you have a more meaningful sort.
 
 For `COUNT(*)`, there's no early exit — it always scans every matching row.
+
+There are no secondary indexes: DuckDB's ART indexes only serve point lookups, not range filters or sorts. Benchmarks with and without indexes on `rating`, `movesNumber`, `popularity` and `nbPlays` were identical, and dropping them shrinks the file from 1.09GB to 790MB.
 
 See [BENCHMARKS.md](./BENCHMARKS.md) for measured query times.
