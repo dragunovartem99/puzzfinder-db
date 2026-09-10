@@ -13,7 +13,9 @@
 ./init
 ```
 
-Downloads the Lichess puzzle CSV, imports it into DuckDB, and builds indexes.
+Downloads the Lichess puzzle CSV, imports it into DuckDB, and builds indexes. Re-running only rebuilds when Lichess has published a newer file; use `FORCE=1 ./init` to rebuild anyway (e.g. after schema changes).
+
+The deploy workflow runs daily and on relevant pushes to `main`, and can be triggered manually from the Actions tab.
 
 ## Schema
 

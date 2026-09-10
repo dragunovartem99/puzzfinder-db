@@ -3,6 +3,26 @@ name: Deploy
 on:
     push:
         branches: [main]
+        paths:
+            - init
+            - Dockerfile
+            - docker-compose.yaml
+            - sql/**
+            - database/**
+            - themes/list
+            - .github/workflows/deploy.yaml
+    schedule:
+        - cron: "0 4 * * *"
+    workflow_dispatch:
+        inputs:
+            force:
+                description: Rebuild even if Lichess data is unchanged
+                type: boolean
+                default: false
+
+concurrency:
+    group: deploy
+    cancel-in-progress: false
 
 jobs:
     deploy:
@@ -14,8 +34,17 @@ jobs:
                   host: ${{ secrets.VPS_HOST }}
                   username: ${{ secrets.VPS_USER }}
                   key: ${{ secrets.VPS_SSH_KEY }}
+                  command_timeout: 60m
                   script: |
+                      set -e
                       cd ${{ secrets.VPS_PROJECT_PATH }}
                       git pull
-                      docker compose run --rm init
-                      docker restart puzzfinder-api
+                      BEFORE=$(stat -c %Y puzzfinder.db 2>/dev/null || echo 0)
+                      docker compose build init
+                      docker compose run --rm -e FORCE=${{ (github.event_name == 'push' || inputs.force) && '1' || '0' }} init
+                      AFTER=$(stat -c %Y puzzfinder.db 2>/dev/null || echo 0)
+                      if [ "$BEFORE" != "$AFTER" ]; then
+                          docker restart puzzfinder-api
+                      else
+                          echo "DB unchanged, skipping API restart"
+                      fi

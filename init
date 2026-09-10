@@ -3,18 +3,31 @@ set -e
 
 . "${BASH_SOURCE%/*}"/"utils/print_header"
 
+SOURCE_URL="https://database.lichess.org/lichess_db_puzzle.csv.zst"
+INPUT_ZST="${BASH_SOURCE%/*}"/"lichess_db_puzzle.csv.zst"
 INPUT_CSV="${BASH_SOURCE%/*}"/"lichess_db_puzzle.csv"
-DB_FILE="${BASH_SOURCE%/*}"/"puzzfinder.db"
+TARGET_DB="${BASH_SOURCE%/*}"/"puzzfinder.db"
+DB_FILE="$TARGET_DB.new"
 SCHEMA_FILE="${BASH_SOURCE%/*}"/"sql/schema.sql"
 INDEXES_FILE="${BASH_SOURCE%/*}"/"sql/indexes.sql"
 
-rm -rf "$DB_FILE"
+# Set FORCE=1 to rebuild even when the source is unchanged (e.g. after schema changes)
+FORCE="${FORCE:-0}"
 
-if [ ! -f "$INPUT_CSV" ]; then
-	print_header "Getting .csv"
-	wget https://database.lichess.org/lichess_db_puzzle.csv.zst
-	zstd -d lichess_db_puzzle.csv.zst && rm lichess_db_puzzle.csv.zst
+print_header "Checking for updates"
+OLD_MTIME=$(stat -c %Y "$INPUT_ZST" 2>/dev/null || echo 0)
+wget -N -P "${BASH_SOURCE%/*}" "$SOURCE_URL"
+NEW_MTIME=$(stat -c %Y "$INPUT_ZST")
+
+if [ "$NEW_MTIME" != "$OLD_MTIME" ] || [ ! -f "$INPUT_CSV" ]; then
+	print_header "Extracting .csv"
+	zstd -d -f "$INPUT_ZST" -o "$INPUT_CSV"
+elif [ "$FORCE" != "1" ] && [ -f "$TARGET_DB" ]; then
+	print_header "Up to date"
+	exit 0
 fi
+
+rm -rf "$DB_FILE" "$DB_FILE.wal"
 
 print_header "Inserting schema"
 duckdb "$DB_FILE" -f "$SCHEMA_FILE"
@@ -24,5 +37,8 @@ print_header "Importing data"
 
 print_header "Creating indexes"
 duckdb "$DB_FILE" -f "$INDEXES_FILE"
+
+rm -f "$TARGET_DB.wal"
+mv -f "$DB_FILE" "$TARGET_DB"
 
 print_header "Database created"
