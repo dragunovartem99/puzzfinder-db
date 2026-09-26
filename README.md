@@ -10,10 +10,17 @@
 ## Setup
 
 ```bash
-./init
+docker compose run --rm init
 ```
 
-Downloads the Lichess puzzle CSV, and imports it into DuckDB. Re-running only rebuilds when Lichess has published a newer file; use `FORCE=1 ./init` to rebuild anyway (e.g. after schema changes).
+Downloads the Lichess puzzle CSV, and imports it into DuckDB. Everything runs in Docker — no host DuckDB needed. Re-running only rebuilds when Lichess has published a newer file; use `docker compose run --rm -e FORCE=1 init` to rebuild anyway (e.g. after schema changes).
+
+Stats and benchmarks run in the same image:
+
+```bash
+docker compose run --rm init ./stats/collect
+docker compose run --rm init ./benchmarks/run
+```
 
 The deploy workflow runs daily and on relevant pushes to `main`, and can be triggered manually from the Actions tab.
 
