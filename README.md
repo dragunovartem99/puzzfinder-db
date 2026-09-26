@@ -5,7 +5,7 @@
 - 72 themes encoded as a `HUGEINT` bitmask — fast bitwise filtering
 - Single-file (~800MB), single-process — no server required ([DuckDB](https://duckdb.org))
 
-<img width="256" src="https://github.com/user-attachments/assets/0fc16e36-655b-49df-865d-4fa6b65cbf42" />
+<img src="preview.png" alt="ASCII chessboard over the words Database created" width="293">
 
 ## Setup
 
@@ -86,3 +86,19 @@ For `COUNT(*)`, there's no early exit — it always scans every matching row.
 There are no secondary indexes: DuckDB's ART indexes only serve point lookups, not range filters or sorts. Benchmarks with and without indexes on `rating`, `movesNumber`, `popularity` and `nbPlays` were identical, and dropping them shrinks the file from 1.09GB to 790MB.
 
 See [BENCHMARKS.md](./BENCHMARKS.md) for measured query times.
+
+## Recording the preview
+
+With [asciinema](https://asciinema.org) and [agg](https://github.com/asciinema/agg), in Tomorrow Night colors,
+keeping the last frame of `init`:
+
+```bash
+asciinema rec --cols 24 --rows 13 \
+    -c "printf '\e[?25l'; bash -c '. utils/print_header && print_header Database created' | expand -t 2 | sed -z 's/\n//' | head -n -1" \
+    preview.cast
+agg --font-family "JetBrainsMonoNL Nerd Font Mono" --font-size 36 \
+    --theme 1d1f21,c5c8c6,282a2e,cc6666,b5bd68,f0c674,81a2be,b294bb,8abeb7,c5c8c6,969896,cc6666,b5bd68,f0c674,81a2be,b294bb,8abeb7,ffffff \
+    preview.cast preview.gif
+# crop the empty part of the cursor row so top and bottom padding match
+ffmpeg -i preview.gif -update 1 -vf crop=iw:ih-27:0:0 preview.png
+```
