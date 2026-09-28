@@ -5,7 +5,7 @@
 - 72 themes encoded as a `HUGEINT` bitmask — fast bitwise filtering
 - Single-file (~800MB), single-process — no server required ([DuckDB](https://duckdb.org))
 
-<img src="preview.png" alt="ASCII chessboard over the words Database created" width="293">
+<img src="preview.png" alt="ASCII chessboard with &quot;Database created&quot;" width="293">
 
 ## Setup
 
@@ -87,10 +87,9 @@ There are no secondary indexes: DuckDB's ART indexes only serve point lookups, n
 
 See [BENCHMARKS.md](./BENCHMARKS.md) for measured query times.
 
-## Recording the preview
+## Recording
 
-With [asciinema](https://asciinema.org) and [agg](https://github.com/asciinema/agg), in Tomorrow Night colors,
-keeping the last frame of `init`:
+With [asciinema](https://asciinema.org) and [agg](https://github.com/asciinema/agg), in Tomorrow Night colors:
 
 ```bash
 asciinema rec --cols 24 --rows 13 \
@@ -99,6 +98,6 @@ asciinema rec --cols 24 --rows 13 \
 agg --font-family "JetBrainsMonoNL Nerd Font Mono" --font-size 36 \
     --theme 1d1f21,c5c8c6,282a2e,cc6666,b5bd68,f0c674,81a2be,b294bb,8abeb7,c5c8c6,969896,cc6666,b5bd68,f0c674,81a2be,b294bb,8abeb7,ffffff \
     preview.cast preview.gif
-# crop the empty part of the cursor row so top and bottom padding match
+# keep the last frame, crop the empty cursor row
 ffmpeg -i preview.gif -update 1 -vf crop=iw:ih-27:0:0 preview.png
 ```
