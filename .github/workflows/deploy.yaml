@@ -43,8 +43,10 @@ jobs:
                       docker compose build init
                       docker compose run --rm -e FORCE=${{ (github.event_name == 'push' || inputs.force) && '1' || '0' }} init
                       AFTER=$(stat -c %Y puzzfinder.db 2>/dev/null || echo 0)
-                      if [ "$BEFORE" != "$AFTER" ]; then
+                      if [ "$BEFORE" = "$AFTER" ]; then
+                          echo "DB unchanged, skipping API restart"
+                      elif [ -n "$(docker ps -aq -f name=^puzzfinder-api$)" ]; then
                           docker restart puzzfinder-api
                       else
-                          echo "DB unchanged, skipping API restart"
+                          echo "No puzzfinder-api container yet, skipping API restart"
                       fi
