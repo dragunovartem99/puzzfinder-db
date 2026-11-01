@@ -8,6 +8,11 @@ for i in "${!THEMES[@]}"; do
 done
 
 duckdb "$DB_FILE" -c "
+SET memory_limit = '1GB';
+SET threads = 1;
+SET preserve_insertion_order = false;
+SET temp_directory = '$DB_FILE.tmp';
+
 INSERT INTO puzzles
 SELECT
     puzzleid AS puzzleId,

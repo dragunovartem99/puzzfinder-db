@@ -1,5 +1,8 @@
 services:
     init:
         build: .
+        mem_limit: 768m
+        memswap_limit: 1536m
+        cpus: 1.0
         volumes:
             - .:/app
